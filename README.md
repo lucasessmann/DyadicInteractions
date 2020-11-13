@@ -5,3 +5,4 @@ Repository for the Course 'Dyadic Interactions in VR' - Topic: Coordinating cogn
 # Git Strategy
 
 lorem ipsum
+lorem pisum
