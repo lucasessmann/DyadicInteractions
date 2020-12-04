@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
-public class ExperimentManager : MonoBehaviour
+public class SpawningManager : MonoBehaviour
 {
     public GameObject spawnPointsGameObject;
     public GameObject distractorPrefab;
