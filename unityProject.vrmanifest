@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.project.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Workspace_Thaldjit\\DyadicInteractions\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\workspace_thaldjit\\DyadicInteractions\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "Project [Testing]"
