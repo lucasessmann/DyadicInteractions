@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6100494148585067358}
   - component: {fileID: 5070652141125072992}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: CamCaster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
