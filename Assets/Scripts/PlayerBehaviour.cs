@@ -34,6 +34,10 @@ namespace Mirror.Examples.Benchmark
 			laserLineRenderer.enabled = true;
 		}
 		
+		void LateUpdate ()
+		{
+			cameraRig.transform.position = this.transform.position;
+		}
 		
 		void ShootLaserFromTargetPosition( Vector3 targetPosition, Vector3 direction, float length )
 		{
