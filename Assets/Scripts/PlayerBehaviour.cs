@@ -29,11 +29,8 @@ namespace Mirror.Examples.Benchmark
 		// Update is called once per frame
 		void Update()
 		{
-			if (this.transform.root.GetComponent<NetworkBehaviour>().isLocalPlayer) {
-				ShootLaserFromTargetPosition( transform.position, transform.rotation * Vector3.forward, laserMaxLength );
-				laserLineRenderer.enabled = true;	
-			}
-
+			ShootLaserFromTargetPosition( transform.position, transform.rotation * Vector3.forward, laserMaxLength );
+			laserLineRenderer.enabled = true;
 		}
 		
 		
