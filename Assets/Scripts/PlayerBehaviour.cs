@@ -10,6 +10,7 @@ namespace Mirror.Examples.Benchmark
 		
 		public LineRenderer laserLineRenderer;
 		public GameObject gazeSphere;
+		public GameObject cameraRig;
 		public float laserWidth = 0.02f;
 		public float laserMaxLength = 10f;
 		 
@@ -20,7 +21,7 @@ namespace Mirror.Examples.Benchmark
 			laserLineRenderer.SetPositions( initLaserPositions );
 			laserLineRenderer.SetWidth( laserWidth, laserWidth );
 
-			if (this.transform.root.GetComponent<NetworkBehaviour>().isLocalPlayer) {
+			if (isLocalPlayer) {
 				gazeSphere.GetComponent<Renderer>().material.color = new Color32(0,255,255,66);
 			}
 
@@ -29,7 +30,7 @@ namespace Mirror.Examples.Benchmark
 		// Update is called once per frame
 		void Update()
 		{
-			ShootLaserFromTargetPosition( transform.position, transform.rotation * Vector3.forward, laserMaxLength );
+			ShootLaserFromTargetPosition( cameraRig.transform.position, cameraRig.transform.rotation * Vector3.forward, laserMaxLength );
 			laserLineRenderer.enabled = true;
 		}
 		
