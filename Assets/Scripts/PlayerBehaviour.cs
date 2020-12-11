@@ -11,10 +11,8 @@ namespace Mirror.Examples.Benchmark
 		public LineRenderer laserLineRenderer;
 		public GameObject gazeSphere;
 		public GameObject cameraRig;
-		public GameObject camera;
 		public float laserWidth = 0.02f;
 		public float laserMaxLength = 10f;
-		public bool startTesti;
 		 
 		// Start is called before the first frame update
 		void Start()
@@ -32,15 +30,8 @@ namespace Mirror.Examples.Benchmark
 		// Update is called once per frame
 		void Update()
 		{
-			ShootLaserFromTargetPosition( camera.transform.position, camera.transform.rotation * Vector3.forward, laserMaxLength );
+			ShootLaserFromTargetPosition( cameraRig.transform.position, cameraRig.transform.rotation * Vector3.forward, laserMaxLength );
 			laserLineRenderer.enabled = true;
-			if (startTesti)
-			{
-				if (isLocalPlayer)
-				{
-					gazeSphere.GetComponent<Renderer>().material.color = Color.red;
-				}
-			}
 		}
 		
 		void LateUpdate ()

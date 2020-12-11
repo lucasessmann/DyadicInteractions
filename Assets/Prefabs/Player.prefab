@@ -183,10 +183,8 @@ MonoBehaviour:
   laserLineRenderer: {fileID: 2404632389524541929}
   gazeSphere: {fileID: 4294570623636557745}
   cameraRig: {fileID: 1396748359899662610}
-  camera: {fileID: 1396593872973103342}
   laserWidth: 0.02
   laserMaxLength: 10
-  startTesti: 0
 --- !u!120 &2404632389524541929
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -324,7 +322,7 @@ MonoBehaviour:
     localRotation: {x: 0, y: 0, z: 0, w: 0}
     localScale: {x: 0, y: 0, z: 0}
     movementSpeed: 0
-  target: {fileID: 1399505431446123760}
+  target: {fileID: 1396748359899388138}
 --- !u!1001 &1396748359899804870
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -404,18 +402,6 @@ GameObject:
 --- !u!4 &1396748359899388138 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 420908, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 3}
-  m_PrefabInstance: {fileID: 1396748359899804870}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1396593872973103342 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1000014254142504, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 3}
-  m_PrefabInstance: {fileID: 1396748359899804870}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1399505431446123760 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4000013889601590, guid: 4d293c8e162f3874b982baadd71153d2,
     type: 3}
   m_PrefabInstance: {fileID: 1396748359899804870}
   m_PrefabAsset: {fileID: 0}
