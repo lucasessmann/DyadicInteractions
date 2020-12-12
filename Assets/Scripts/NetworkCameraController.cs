@@ -6,10 +6,12 @@
 
 using UnityEngine;
 
-namespace UnityTemplateProjects
+namespace Mirror
 {
-    public class SimpleCameraController : MonoBehaviour
+    public class NetworkCameraController : NetworkBehaviour
     {
+		
+		
         class CameraState
         {
             public float yaw;
@@ -114,6 +116,8 @@ namespace UnityTemplateProjects
         
         void Update()
         {
+			if (!this.transform.root.GetComponent<NetworkBehaviour>().isLocalPlayer){return;}
+			
             Vector3 translation = Vector3.zero;
 
 #if ENABLE_LEGACY_INPUT_MANAGER

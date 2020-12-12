@@ -1596,6 +1596,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9edf2117878cf04e853403994c47b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logData: 0
+  savingInterval: 1
 --- !u!1 &1441792710
 GameObject:
   m_ObjectHideFlags: 0
@@ -1708,7 +1710,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1730
+  m_Name: pb_Mesh-1214
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
