@@ -20,8 +20,10 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        // Finding the necessary canvasses
-        // startButton = premenuCanvas.GetComponent(GameObject.Find("Start Experiment Button"))
+        // limit the SubID input field to 4 characters
+        subIdText1.characterLimit = 4;
+        subIdText2.characterLimit = 4;
+        // Starting with the Pre Menu
         settingsCanvas.SetActive(false);
         areUsureCanvas.SetActive(false);
         premenuCanvas.SetActive(true);
