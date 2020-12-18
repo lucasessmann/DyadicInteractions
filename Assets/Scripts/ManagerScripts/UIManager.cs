@@ -6,22 +6,31 @@ using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    #region Initialisation
+
+    public bool lobbySceneRunning = false;
+    public bool experimentRunning = false;
+
+    #endregion
     
-    public void Start()
-    {
 
-    }
+    #region Methods
 
-    // Update is called once per frame
-    void Update()
-    {
+    // Start is called before the first frame update
+        public void Start()
+        {
+            // Before everything start the premenu 
+            
+        }
+    
+        // Update is called once per frame
+        void Update()
+        {
+    
+        }
 
-    }
+    #endregion
 
-    public void PreStartButton()
-    {
-        // Load Lobby Scene
-    }
 
 }

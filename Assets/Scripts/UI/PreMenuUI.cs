@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 
 public class PreMenuUI : MonoBehaviour
 {
+    #region Initialisaiton
+    
     public GameObject premenuCanvas;
     public GameObject areUsureCanvas;
     public GameObject settingsCanvas;
@@ -16,7 +18,11 @@ public class PreMenuUI : MonoBehaviour
     public bool subId1done = false;
     public bool subId2done = false;
     public bool captureData = false;
+    
+    #endregion
 
+    #region Methods
+    
     // Start is called before the first frame update
     public void Start()
     {
@@ -90,4 +96,8 @@ public class PreMenuUI : MonoBehaviour
         settingsCanvas.SetActive(false);
         premenuCanvas.SetActive((true));
     }
+    
+    #endregion
+    
+    
 }
