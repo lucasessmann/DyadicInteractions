@@ -87,6 +87,14 @@ public class OverlayMenuUI : MonoBehaviour
             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+
+            makeInteractable = false;
+            // deactivate the buttons
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
         else
         {
@@ -107,6 +115,14 @@ public class OverlayMenuUI : MonoBehaviour
             pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+
+            makeInteractable = true;
+            // reactivate the buttons
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
     }
 
@@ -120,7 +136,20 @@ public class OverlayMenuUI : MonoBehaviour
     {
          if (settingPressed) 
          {
-             ColorSwitch();
+             // Setting the button color
+             startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             
              makeInteractable = true;
              // reactivate the other buttons
              startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -136,7 +165,20 @@ public class OverlayMenuUI : MonoBehaviour
          }
          else 
          {
-             ColorSwitch();
+             // Setting the button color
+             startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             
              makeInteractable = false;
              // reactivate the other buttons
              startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -179,7 +221,20 @@ public class OverlayMenuUI : MonoBehaviour
     {
         if (calPressed)
         {
-            ColorSwitch();
+            // Setting the button color
+            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            
             makeInteractable = true;
             // reactivate the other buttons
             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -194,7 +249,20 @@ public class OverlayMenuUI : MonoBehaviour
         }
         else
         {
-            ColorSwitch();
+            // Setting the button color
+            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            
             makeInteractable = false;
             // reactivate the other buttons
             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -213,7 +281,20 @@ public class OverlayMenuUI : MonoBehaviour
     {
         if (valPressed)
         {
-            ColorSwitch();
+            // change the color to OG
+            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            
             makeInteractable = true;
             // reactivate the other buttons
             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -228,7 +309,20 @@ public class OverlayMenuUI : MonoBehaviour
         }
         else
         {
-            ColorSwitch();
+            // Setting the button color
+            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            
             makeInteractable = false;
             // reactivate the other buttons
             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -272,12 +366,22 @@ public class OverlayMenuUI : MonoBehaviour
             // color
             startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            
+            makeInteractable = true;
+            // reactivate the other buttons
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
         else
         {
@@ -288,12 +392,22 @@ public class OverlayMenuUI : MonoBehaviour
             // color
             startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            
+            makeInteractable = false;
+            // reactivate the other buttons
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
         
     }
@@ -303,118 +417,5 @@ public class OverlayMenuUI : MonoBehaviour
         // Are you sure stuff and data saving 
     }
     
-    // Extra button color switch function
-
-
-    public void ColorSwitch()
-    {
-        
-        // Setting Call
-        if (settingPressed)
-        {
-            // Setting the button color
-            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-        }
-        else
-        {
-            // Setting the button color
-            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-        }
-     
-        // Calibration Call
-        if (calPressed)
-        {
-            // Setting the button color
-            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-        }
-        else
-        {
-            // Setting the button color
-            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-        }
-        
-        // Validation Call
-        if (valPressed)
-        {
-            // change the color to OG
-            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-        }
-        else
-        {
-
-            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-            endExpButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            endExpButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-        } 
-        
-    }
-
-    public void ColorSwitchSaturation()
-    {
-        
-    }
+    
 }
