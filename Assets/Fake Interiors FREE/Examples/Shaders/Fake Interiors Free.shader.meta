@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 963bc3c6f4b8c2f4c8db108f28a07575
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _FacadeAlbedo: {fileID: 2800000, guid: 1bebea1ffcd49b04ebdf740a4a576413, type: 3}
+  - _FacadeSmoothness: {fileID: 2800000, guid: 7435cc5dce7336d498ce14c2e9802866, type: 3}
+  - _Floor: {fileID: 2800000, guid: d278f7f4a857aa443810643642bd99e9, type: 3}
+  - _Wall: {instanceID: 0}
+  - _Props: {instanceID: 0}
+  - _Back: {instanceID: 0}
+  - _Ceiling: {instanceID: 0}
+  - _texcoord: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
