@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class ExampleNetworkManager : MonoBehaviour
+public class NetworkManager : MonoBehaviour
 {
     [Header("Network Settings")]
     public int PortReliable = 42069;
@@ -13,17 +13,7 @@ public class ExampleNetworkManager : MonoBehaviour
     [Header("Required References")]
     public NetworkComponent NetComp;
 
-    private ExperimentState LastState = new ExperimentState();
     private UserState SendingUserState = new UserState();
-
-
-    // use this to distinguish between multiplen etwork agents
-    // slot '0' is ALWAYS the server
-    // the first client will get slot '1', the next slot '2', and so on
-    private byte MySlot= 0;
-
-    // server only variable. used to assign slots to incoming clients
-    private byte NextSlot = 0;
 
 
     public bool StartServer()
@@ -58,26 +48,51 @@ public class ExampleNetworkManager : MonoBehaviour
 
     public void BroadCastExperimentStatusUpdate(EExperimentStatus status)
     {
-        Debug.LogFormat("Broadcasting experiment status update: {0}", status.ToString());
+        //Debug.LogFormat("Broadcasting experiment status update: {0}", status.ToString());
         NetComp.BroadcastNetworkData(ENetChannel.Reliable, new ExperimentState { Status = status });
     }
 
-    //public void BroadcastVRAvatarUpdate(Transform gazeSphereTransform)
-    public void BroadcastExperimentState(Transform gazeSphereTransform)
+    public void BroadcastVRAvatarUpdate(Transform VRHead, Transform VRHandLeft, Transform VRHandRight)
     {
-        SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
-
+        //Debug.Log("Broadcasting VR avatar update");
+        /*SendingUserState.HeadPosition      = VRHead.position;
+        SendingUserState.HeadRotation      = VRHead.rotation;
+        SendingUserState.HandLeftPosition  = VRHandLeft.position;
+        SendingUserState.HandLeftRotation  = VRHandLeft.rotation;
+        SendingUserState.HandRightPosition = VRHandRight.position;
+        SendingUserState.HandRightRotation = VRHandRight.rotation;*/
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
     }
+    public void BroadcastExperimentState(Transform gazeSphereTransform)
+    {
+        
+        /*
+        SendingUserState.TargetPosition = TargetPosition;
 
+        SendingUserState.InputGiven = inputGiven;
+
+        SendingUserState.CannonRotation = cannonRotation;
+        
+//        Debug.Log("Broadcasting VR avatar update"+SendingUserState.InputStrength );
+        SendingUserState.HeadPosition      = VRHead.position;
+        SendingUserState.HeadRotation      = VRHead.rotation;
+     
+        SendingUserState.HandLeftPosition  = VRHandLeft.position;
+        SendingUserState.HandLeftRotation  = VRHandLeft.rotation;
+        SendingUserState.HandRightPosition = VRHandRight.position;
+        SendingUserState.HandRightRotation = VRHandRight.rotation;
+        */
+        SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
+        NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Assert(NetComp!=null, "Please set a reference to a Network Component");
+        Debug.Assert(NetComp != null, "Please set a Network Component");
         NetComp.OnNetworkDataReceived += OnNetworkDataReceived;
-        NetComp.OnClientDisconnected += OnClientDisconected;
-        NetComp.OnClientConnected += OnClientConnected;
+        NetComp.OnClientDisconnected  += OnClientDisconected;
+        NetComp.OnClientConnected     += OnClientConnected;
     }
 
     // Update is called once per frame
@@ -101,43 +116,38 @@ public class ExampleNetworkManager : MonoBehaviour
     void UpdateClient()
     {
         Debug.Assert(GetState()==ENetworkState.Running);
-
-        //if you are Client your Slot number should be higher than 0
-        if (MySlot == 0)
-        {
-            //as long as you dont have slot , dont do anything
-            return;
-        } 
-
-        // TODO: put your client code here
     }
 
     void UpdateServer()
     {
         Debug.Assert(GetState()==ENetworkState.Running);
-
-        // TODO: put your server code here
     }
+   
     
     void OnNetworkDataReceived(object sender, ReceivedNetworkDataEventArgs e)
     {
         NetworkData data = e.Data;
         if (e.Type == ENetDataType.ExperimentState)
         {
-            ExperimentState state = (ExperimentState)data;
-            MySlot = state.SocketNumber;
+            ExperimentState state =(ExperimentState) data;
+            ExperimentManager.Instance().SetExperimentStatus(state.Status);
+            //Debug.LogFormat("Received experiment status update: {0}", state.Status);
+        }
+        else if (e.Type == ENetDataType.UserState)
+        {
+            //Debug.Log("Received user data update");
+            ExperimentManager.Instance().ReceivedUserStateUpdate((UserState)data);
         }
     }
     
-    void OnClientConnected(object sender, ConnectionEventArgs e)
+    void OnClientConnected(object sender, ConnectionEventArgs e)         //if you are a server than, you handle clients
     {
         if (NetComp.IsServer())
         {
-            ExperimentState state = new ExperimentState();
-            state.SocketNumber = NextSlot++;
-            NetComp.SendNetworkData(e.Handle, ENetChannel.Reliable, state);
+            BroadCastExperimentStatusUpdate(ExperimentManager.Instance().GetExperimentStatus());
         }
     }
+    
     
     void OnClientDisconected(object sender, ConnectionEventArgs e)
     {

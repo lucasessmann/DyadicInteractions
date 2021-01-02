@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public class ExperimentManager : MonoBehaviour
@@ -27,7 +26,7 @@ public class ExperimentManager : MonoBehaviour
     public float InterpolationFactor = 5.0f;
 
     [Header("Required References")]
-    public ExampleNetworkManager NetMan;
+    public NetworkManager NetMan;
 
     /*public Transform LocalHead;
     public Transform LocalHandLeft;
@@ -35,9 +34,9 @@ public class ExperimentManager : MonoBehaviour
     public Transform RemoteHead;
     public Transform RemoteHandLeft;
     public Transform RemoteHandRight;
-    
+     */
     public TextMesh CountdownDiplay;
-    */
+   
     
 
     private EExperimentStatus Status;
@@ -86,23 +85,23 @@ public class ExperimentManager : MonoBehaviour
 
         if (status == EExperimentStatus.Waiting)
         {
-            /*CountdownDiplay.text = "Waiting...";
-            CountdownDiplay.gameObject.SetActive(true);*/
+            CountdownDiplay.text = "Waiting...";
+            CountdownDiplay.gameObject.SetActive(true);
         }
         else if (status == EExperimentStatus.WarmUp)
         {
             WarmUpTimer = WarmUpTime;
-            /*CountdownDiplay.gameObject.SetActive(true);*/
+            CountdownDiplay.gameObject.SetActive(true);
         }
         else // Running
         {
             /*if (NetMan.IsServer())
             {
                 dronePositionController.Run(true);
-            }
+            }*/
             
             CountdownDiplay.gameObject.SetActive(false);
-            */
+            
         }
     }
 
@@ -193,9 +192,9 @@ public class ExperimentManager : MonoBehaviour
         Debug.Assert(RemoteHead != null, "Remote Head is not set");
         Debug.Assert(RemoteHandLeft != null, "Remote Hand Left is not set");
         Debug.Assert(RemoteHandRight != null, "Remote Hand Right is not set");
-        
-        Debug.Assert(CountdownDiplay != null, "Countdown text mesh is not set!");
         */
+        Debug.Assert(CountdownDiplay != null, "Countdown text mesh is not set!");
+        
         Status = EExperimentStatus.Waiting;
     }
 
@@ -218,7 +217,7 @@ public class ExperimentManager : MonoBehaviour
                     SetExperimentStatus(EExperimentStatus.Running);
                 }
             }
-            /*CountdownDiplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();*/
+            CountdownDiplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();
         }
     }
 }

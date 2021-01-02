@@ -87,6 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8887816874615996348}
+  - component: {fileID: 5653777211729330166}
   m_Layer: 0
   m_Name: NetworkUI
   m_TagString: Untagged
@@ -110,6 +111,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5653777211729330166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550939049059647275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e009ef55cc8a80b409e7d1dee396302a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NetMan: {fileID: 0}
+  Exp: {fileID: 0}
+  ExperimentState: {fileID: 3483801615458005838}
+  NetworkState: {fileID: 3483801614799196042}
+  AddressField: {fileID: 3483801614050283965}
+  BtnStartServer: {fileID: 3483801615477508329}
+  BtnStartClient: {fileID: 3483801614746388209}
+  BtnAbortClose: {fileID: 2624434089012449771}
+  BtnStartExp: {fileID: 4743921804087202309}
+  BtnAbortExp: {fileID: 2734957863694548500}
+  ClientList: {fileID: 2623623748851745222}
 --- !u!1 &692550915868491793
 GameObject:
   m_ObjectHideFlags: 0
