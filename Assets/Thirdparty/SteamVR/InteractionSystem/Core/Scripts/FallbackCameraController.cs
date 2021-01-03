@@ -6,6 +6,7 @@
 
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Valve.VR.InteractionSystem
 {
@@ -13,6 +14,12 @@ namespace Valve.VR.InteractionSystem
 	[RequireComponent( typeof( Camera ) )]
 	public class FallbackCameraController : MonoBehaviour
 	{
+		// added by Jasmin
+
+		public Camera cam;
+		public GameObject gazeSphere;
+		
+		// until here 
 		public float speed = 4.0f;
 		public float shiftSpeed = 16.0f;
 		public bool showInstructions = true;
@@ -25,12 +32,23 @@ namespace Valve.VR.InteractionSystem
 		void OnEnable()
 		{
 			realTime = Time.realtimeSinceStartup;
+			
 		}
 
 
 		//-------------------------------------------------
 		void Update()
 		{
+			// added by Jasmin
+
+			Ray gazeRay = cam.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(gazeRay, out hit, 100f))
+			{
+				gazeSphere.transform.position = hit.point;
+			}
+			
+			// until here
 			float forward = 0.0f;
 			if ( Input.GetKey( KeyCode.W ) || Input.GetKey( KeyCode.UpArrow ) )
 			{

@@ -37,7 +37,7 @@ public class SpawningManager : MonoBehaviour
     {
         // Just for testing
         // TODO: delete later
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             SpawnStimuli();
         }

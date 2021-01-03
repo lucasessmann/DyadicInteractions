@@ -19,7 +19,7 @@ namespace Mirror.Examples.Benchmark
 		{
 			Vector3[] initLaserPositions = new Vector3[ 2 ] { Vector3.zero, Vector3.zero };
 			laserLineRenderer.SetPositions( initLaserPositions );
-			laserLineRenderer.SetWidth( laserWidth, laserWidth );
+			//laserLineRenderer.SetWidth( laserWidth, laserWidth );
 
 			if (isLocalPlayer) {
 				gazeSphere.GetComponent<Renderer>().material.color = new Color32(0,255,255,66);
