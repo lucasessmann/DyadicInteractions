@@ -47,7 +47,7 @@ public class SpawningManager : MonoBehaviour
         }
     }
 
-    public void SpawnStimuli()
+    public void Update()
     {
         // Just for testing
         // TODO: delete later
@@ -60,14 +60,14 @@ public class SpawningManager : MonoBehaviour
         //TODO: Connect with GUI buttons
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            lastReactionTime = Time.time - stimuliOnsetTime;
+            _lastReactionTime = Time.time - stimuliOnsetTime;
             CheckAnswer(true);
             //SpawnStimuli();
         }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
-            lastReactionTime = Time.time - stimuliOnsetTime;
+            _lastReactionTime = Time.time - stimuliOnsetTime;
             CheckAnswer(false);
             //SpawnStimuli();
         }
@@ -80,13 +80,15 @@ public class SpawningManager : MonoBehaviour
         if (targetPresent == response)
         {
             Debug.Log("Correct!");
+            GiveTargetFeedback();
         }
         else
         {
             Debug.Log("Incorrect!");
+            GiveTargetFeedback();
         }
         
-        Debug.Log("RT was " + lastReactionTime + " seconds");
+        Debug.Log("RT was " + _lastReactionTime + " seconds");
     }
 
     private void SpawnStimuli()
@@ -137,7 +139,6 @@ public class SpawningManager : MonoBehaviour
 
         // Save GOs in list for later deletion.
         _stimuliGOs = GameObject.FindGameObjectsWithTag("stimulus");
-        Debug.Log(_stimuliGOs);
         _stimuliInScene = true;
         stimuliOnsetTime = Time.time;
     }
