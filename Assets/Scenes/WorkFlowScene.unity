@@ -348,7 +348,7 @@ MonoBehaviour:
   WarmUpTime: 3
   InterpolationFactor: 5
   NetMan: {fileID: 309331644}
-  CountdownDiplay: {fileID: 0}
+  CountdownDiplay: {fileID: 10573041}
 --- !u!1 &203476896
 GameObject:
   m_ObjectHideFlags: 0
@@ -685,6 +685,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2841310779425259775, guid: 96a8e230ecaf45240a51479da721830a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3913411758506637113, guid: 96a8e230ecaf45240a51479da721830a,
+        type: 3}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4410684401312675558, guid: 96a8e230ecaf45240a51479da721830a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9025663959768649143, guid: 96a8e230ecaf45240a51479da721830a,
         type: 3}
       propertyPath: m_Name
@@ -698,7 +713,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-8194
+  m_Name: pb_Mesh-1838
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1011,6 +1026,21 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1026991711}
+    - target: {fileID: 3993792161890465843, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
+        type: 3}
+      propertyPath: m_SelectedEdges.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993792161890465843, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
+        type: 3}
+      propertyPath: m_SelectedFaces.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993792161890465843, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
+        type: 3}
+      propertyPath: m_SelectedVertices.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5342618294079656884, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
         type: 3}
       propertyPath: m_Mesh
@@ -1021,6 +1051,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1687305965}
+    - target: {fileID: 7071862871624688190, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8669892940894546988, guid: 836ddfdbdfe29d34e81c027bcc03ffa0,
         type: 3}
       propertyPath: m_Name
