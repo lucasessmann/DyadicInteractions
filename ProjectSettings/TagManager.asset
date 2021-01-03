@@ -15,6 +15,7 @@ TagManager:
   - Painting
   - Standing Lamp
   - Door
+  - Wall of Fame
   layers:
   - Default
   - TransparentFX
