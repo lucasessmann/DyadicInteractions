@@ -217,7 +217,7 @@ public class ExperimentManager : MonoBehaviour
                     SetExperimentStatus(EExperimentStatus.Running);
                 }
             }
-            CountdownDiplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();
+            //CountdownDiplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();
         }
     }
 }

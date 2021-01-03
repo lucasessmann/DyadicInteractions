@@ -9,23 +9,37 @@ public class SpawningManager : MonoBehaviour
     public GameObject spawnPointsGameObject;
     public GameObject distractorPrefab;
     public GameObject targetPrefab;
-    public float stimulusPresenceRate = 0.5f; 
-    
+    private GameObject _targetGO;
+    public float stimulusPresenceRate = 0.5f;
+
+    private ExperimentManager _experimentManager;
+
     private List<Transform> _spawnPointsList = new List<Transform>();
-    private bool _stimuliInScene = false;
-    private GameObject[] _stimuliGOs;
+    private List<Transform> _chosenSpawnPoints;
     private List<Quaternion> _distractorDirectons = new List<Quaternion>();
-    private Random rnd = new Random();
-    private bool targetPresent;
-    private float stimuliOnsetTime;
-    private float lastReactionTime;
+
+    private bool _stimuliInScene = false;
+    public bool targetPresent;
+
+    private GameObject[] _stimuliGOs;
+    private Random _rnd = new Random();
+
+    private int[] _stimuliSizes = {21, 35};
+    private int _stimuliSize;
+    private int _targetIndex;
+
+    public float stimuliOnsetTime;
+    private float _lastReactionTime;
+
     private void Start()
     {
-        _distractorDirectons.Add(Quaternion.Euler(-90,0,180));
-        _distractorDirectons.Add(Quaternion.Euler(-90,0,0 ));
-        _distractorDirectons.Add(Quaternion.Euler(90,0,0 ));
-        _distractorDirectons.Add(Quaternion.Euler(90,0,180 ));
-       
+        _experimentManager = GetComponentInParent<ExperimentManager>();
+
+        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 180));
+        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 0));
+        _distractorDirectons.Add(Quaternion.Euler(90, 0, 0));
+        _distractorDirectons.Add(Quaternion.Euler(90, 0, 180));
+
         // Get transforms of every spawn point "cube" of the empty parent GO "SpawnPoints"
         foreach (Transform child in spawnPointsGameObject.transform)
         {
@@ -33,7 +47,7 @@ public class SpawningManager : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Update()
     {
         // Just for testing
         // TODO: delete later
@@ -46,14 +60,14 @@ public class SpawningManager : MonoBehaviour
         //TODO: Connect with GUI buttons
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            lastReactionTime = Time.time - stimuliOnsetTime;
+            _lastReactionTime = Time.time - stimuliOnsetTime;
             CheckAnswer(true);
             //SpawnStimuli();
         }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
-            lastReactionTime = Time.time - stimuliOnsetTime;
+            _lastReactionTime = Time.time - stimuliOnsetTime;
             CheckAnswer(false);
             //SpawnStimuli();
         }
@@ -66,13 +80,15 @@ public class SpawningManager : MonoBehaviour
         if (targetPresent == response)
         {
             Debug.Log("Correct!");
+            GiveTargetFeedback();
         }
         else
         {
             Debug.Log("Incorrect!");
+            GiveTargetFeedback();
         }
         
-        Debug.Log("RT was " + lastReactionTime + " seconds");
+        Debug.Log("RT was " + _lastReactionTime + " seconds");
     }
 
     private void SpawnStimuli()
@@ -86,36 +102,41 @@ public class SpawningManager : MonoBehaviour
             }
         }
 
-        targetPresent = rnd.NextDouble() < stimulusPresenceRate;
-        
+        targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
+
+        _stimuliSize = _stimuliSizes[_rnd.Next(_stimuliSizes.Length)];
+        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+
+
         if (targetPresent)
         {
             // Randomly select the target position among the spawn points and 
             // create another list for distractor spawn points
-        
-            var targetIndex = rnd.Next(_spawnPointsList.Count);
-            var distractorSpawnPoints = RemoveTargetIndexFromList(_spawnPointsList, targetIndex);
-        
+
+            _targetIndex = _rnd.Next(_chosenSpawnPoints.Count);
+            var distractorSpawnPoints = RemoveTargetIndexFromList(_chosenSpawnPoints, _targetIndex);
+
             // Spawn Target Prefab
-            Instantiate(targetPrefab, _spawnPointsList[targetIndex]);
-        
+            _targetGO = Instantiate(targetPrefab, _chosenSpawnPoints[_targetIndex]);
+
             // Spawn Distractor Objects with randomly preselected orientation
             foreach (var spawnPoint in distractorSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[rnd.Next(_distractorDirectons.Count)];
-                var tmp_go = Instantiate(distractorPrefab, spawnPoint);
-                tmp_go.transform.GetChild(0).rotation = distractorDirection;
+                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
+                tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
         }
         else
         {
-            foreach (var spawnPoint in _spawnPointsList)
+            foreach (var spawnPoint in _chosenSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[rnd.Next(_distractorDirectons.Count)];
-                var tmp_go = Instantiate(distractorPrefab, spawnPoint);
-                tmp_go.transform.GetChild(0).rotation = distractorDirection;
+                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
+                tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
         }
+
         // Save GOs in list for later deletion.
         _stimuliGOs = GameObject.FindGameObjectsWithTag("stimulus");
         _stimuliInScene = true;
@@ -128,9 +149,16 @@ public class SpawningManager : MonoBehaviour
         var listCount = list.Count;
         var result = new Transform[listCount - 1];
         list.CopyTo(0, result, 0, targetIndex);
-        list.CopyTo(targetIndex+1, result, targetIndex, listCount-1-targetIndex);
-        
+        list.CopyTo(targetIndex + 1, result, targetIndex, listCount - 1 - targetIndex);
+
         return new List<Transform>(result);
     }
-    
+
+    public void GiveTargetFeedback()
+    {
+        if (targetPresent)
+        {
+            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+        }
+    }
 }
