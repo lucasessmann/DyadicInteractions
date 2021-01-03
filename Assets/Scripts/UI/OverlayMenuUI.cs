@@ -212,28 +212,13 @@ public class OverlayMenuUI : MonoBehaviour
     public void CalibrationButton()
     {
         calPressed = !calPressed;
+        // Start Calibration from somewhere
     }
     // Validation button
     public void ValidationButton()
     {
         valPressed = !valPressed;
-    }
-
-    public void CalibrationSub1()
-    {
-        // Start calibration sub1
-    }
-    public void CalibrationSub2()
-    {
-        // Start calibration sub2
-    }
-    public void ValidationSub1()
-    {
-        // Start validation sub1
-    }
-    public void ValidationSub2()
-    {
-        // Start validation sub2
+        // Start Validation from somewhere
     }
 
     // Pausing or resuming the experiment (what about data capture pause?)
@@ -298,7 +283,7 @@ public class OverlayMenuUI : MonoBehaviour
     // End experiment button
     public void EndExperiment()
     {
-        // Are you sure stuff and data saving 
+        // Are you sure stuff 
     }
     
     
