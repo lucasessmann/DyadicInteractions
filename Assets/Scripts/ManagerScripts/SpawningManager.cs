@@ -49,6 +49,48 @@ public class SpawningManager : MonoBehaviour
 
     public void SpawnStimuli()
     {
+        // Just for testing
+        // TODO: delete later
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SpawnStimuli();
+        }
+
+        // DUMMY ANSWERS 
+        //TODO: Connect with GUI buttons
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            lastReactionTime = Time.time - stimuliOnsetTime;
+            CheckAnswer(true);
+            //SpawnStimuli();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            lastReactionTime = Time.time - stimuliOnsetTime;
+            CheckAnswer(false);
+            //SpawnStimuli();
+        }
+    }
+
+    private void CheckAnswer(bool response)
+    {
+        //DUMMY FEEBACK
+        // TODO: if response correct and target present -> Highlight Target!
+        if (targetPresent == response)
+        {
+            Debug.Log("Correct!");
+        }
+        else
+        {
+            Debug.Log("Incorrect!");
+        }
+        
+        Debug.Log("RT was " + lastReactionTime + " seconds");
+    }
+
+    private void SpawnStimuli()
+    {
         // If stimuli already in scene, delete before spawning new ones
         if (_stimuliInScene)
         {
