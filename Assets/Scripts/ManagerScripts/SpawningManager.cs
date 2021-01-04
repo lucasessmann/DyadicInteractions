@@ -62,7 +62,7 @@ public class SpawningManager : MonoBehaviour
             CheckAnswer(true);
         }
 
-        if ( grabPinch.GetStateDown(rightInput))
+        if (grabPinch.GetStateDown(rightInput))
         {
             _lastReactionTime = Time.time - stimuliOnsetTime;
             CheckAnswer(false);
@@ -94,23 +94,7 @@ public class SpawningManager : MonoBehaviour
        
 
     }
-
-
-
-        private void TargetPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-    {
-        _lastReactionTime = Time.time - stimuliOnsetTime;
-        CheckAnswer(true);
-        print("Present");
-    }
-
-    private void TargetNotPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-    {
-        _lastReactionTime = Time.time - stimuliOnsetTime;
-        CheckAnswer(false);
-        print("Not present");
-    }
-
+    
     private void CheckAnswer(bool response)
     {
         //DUMMY FEEBACK
