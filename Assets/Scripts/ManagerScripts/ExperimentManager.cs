@@ -10,6 +10,14 @@ public class ExperimentManager : MonoBehaviour
     
     public Transform RemoteGazeSphere;
     
+    // TODO: Try remote and local bool variables
+    public bool LocalResponseGiven;
+    public bool LocalRespondedTargetPresent;
+    
+    public bool RemoteResponseGiven;
+    public bool RemoteRespondedTargetPresent;
+    
+    
     //
 
     private static ExperimentManager _Instance;
@@ -61,17 +69,19 @@ public class ExperimentManager : MonoBehaviour
         //LocalGazeSphere.position  = Vector3.Lerp(LocalGazeSphere.position,          incomingState.GazeSpherePosition,      Time.deltaTime * InterpolationFactor);
 
         //
-        
+        RemoteResponseGiven = incomingState.responseGiven;
+        RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
+
         //EyetrackingRemote
-        
+
         //Debug.Log(incomingState.TargetPosition);
-        
+
         /* 
         if (NetMan.IsServer()==false)
         { 
             dronePositionController.SetPositionAsPercentage(incomingState.TargetPosition);
         }*/
-        
+
     }
 
     public void SetExperimentStatus(EExperimentStatus status)
@@ -202,7 +212,7 @@ public class ExperimentManager : MonoBehaviour
     {
         if (NetMan.GetState() == ENetworkState.Running)
         {
-            NetMan.BroadcastExperimentState(LocalGazeSphere);
+            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent);
          //   NetMan.BroadcastVRAvatarUpdate(LocalHead, LocalHandLeft, LocalHandRight);
         }
 

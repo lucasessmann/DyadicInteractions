@@ -16,29 +16,33 @@ public class SpawningManager : MonoBehaviour
 
     private List<Transform> _spawnPointsList = new List<Transform>();
     private List<Transform> _chosenSpawnPoints;
-    private List<Quaternion> _distractorDirectons = new List<Quaternion>();
+    private List<Quaternion> _distractorDirections = new List<Quaternion>();
 
     private bool _stimuliInScene = false;
     public bool targetPresent;
-
-    private GameObject[] _stimuliGOs;
-    private Random _rnd = new Random();
-
+    
     private int[] _stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
+    
+    
+    public int randomSeed = 7;
 
     public float stimuliOnsetTime;
     private float _lastReactionTime;
+    
+    private GameObject[] _stimuliGOs;
+    private Random _rnd;
 
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
+        _rnd = new Random(randomSeed);
 
-        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 180));
-        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 0));
-        _distractorDirectons.Add(Quaternion.Euler(90, 0, 0));
-        _distractorDirectons.Add(Quaternion.Euler(90, 0, 180));
+        _distractorDirections.Add(Quaternion.Euler(-90, 0, 180));
+        _distractorDirections.Add(Quaternion.Euler(-90, 0, 0));
+        _distractorDirections.Add(Quaternion.Euler(90, 0, 0));
+        _distractorDirections.Add(Quaternion.Euler(90, 0, 180));
 
         // Get transforms of every spawn point "cube" of the empty parent GO "SpawnPoints"
         foreach (Transform child in spawnPointsGameObject.transform)
@@ -55,44 +59,46 @@ public class SpawningManager : MonoBehaviour
         {
             SpawnStimuli();
         }
+        
+        if(_experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven)
+        {
+            //HandleResponse(_experimentManager.respondedTargetPresent);
+            GiveTargetFeedback();
+        }
 
         // DUMMY ANSWERS 
         //TODO: Connect with GUI buttons
         if (Input.GetKeyDown(KeyCode.Y))
         {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(true);
+            HandleResponse(true);
             //SpawnStimuli();
         }
 
         if (Input.GetKeyDown(KeyCode.N))
         {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(false);
+            HandleResponse(false);
             //SpawnStimuli();
         }
     }
 
-    private void CheckAnswer(bool response)
+    private void HandleResponse(bool answeredPresent)
     {
-        //DUMMY FEEBACK
-        // TODO: if response correct and target present -> Highlight Target!
-        if (targetPresent == response)
-        {
-            Debug.Log("Correct!");
-            GiveTargetFeedback();
-        }
-        else
-        {
-            Debug.Log("Incorrect!");
-            GiveTargetFeedback();
-        }
-        
+        _lastReactionTime = Time.time - stimuliOnsetTime;
+        _experimentManager.LocalResponseGiven = true;
+        _experimentManager.LocalRespondedTargetPresent = answeredPresent;
+        //CheckAnswer(answeredPresent);
+
+        Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + _lastReactionTime + " seconds");
+
+        //GiveTargetFeedback();
     }
 
     private void SpawnStimuli()
     {
+        // Reset Answers
+        _experimentManager.LocalResponseGiven = false;
+
         // If stimuli already in scene, delete before spawning new ones
         if (_stimuliInScene)
         {
@@ -105,7 +111,7 @@ public class SpawningManager : MonoBehaviour
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
         _stimuliSize = _stimuliSizes[_rnd.Next(_stimuliSizes.Length)];
-        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(7, 21) : _spawnPointsList;
 
 
         if (targetPresent)
@@ -122,7 +128,7 @@ public class SpawningManager : MonoBehaviour
             // Spawn Distractor Objects with randomly preselected orientation
             foreach (var spawnPoint in distractorSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
                 var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
                 tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
@@ -131,7 +137,7 @@ public class SpawningManager : MonoBehaviour
         {
             foreach (var spawnPoint in _chosenSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
                 var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
                 tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
@@ -156,9 +162,12 @@ public class SpawningManager : MonoBehaviour
 
     public void GiveTargetFeedback()
     {
+        // TODO: Extend Feedback
         if (targetPresent)
         {
             _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
         }
+
+        
     }
 }
