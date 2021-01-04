@@ -167,7 +167,7 @@ public class SpawningManager : MonoBehaviour
         // TODO: Extend Feedback
         if (targetPresent)
         {
-            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
 
         
