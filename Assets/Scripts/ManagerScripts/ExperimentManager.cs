@@ -50,6 +50,20 @@ public class ExperimentManager : MonoBehaviour
     private EExperimentStatus Status;
     private float WarmUpTimer;
 
+    public bool ExperimentRoom;
+
+    public void StartExperimentRoom(bool ExperimentRoom)
+    {
+        if (ExperimentRoom)
+        {
+            // NOT VR
+            // move PlayerSteam_NoSteamVRFallbacjObjectsFallbacjobjects to -32,5,0
+            // Rotation is 0, 0, 0
+            
+            // dont know which one to move if using VR
+            // probably VRcamera :D
+        }
+    }
     /*public DronePositionController dronePositionController;*/
 
 
