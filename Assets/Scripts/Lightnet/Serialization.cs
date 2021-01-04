@@ -136,12 +136,13 @@ public class UserState : NetworkData
 
         sizeof(byte) +         // header     (ENetDataType.UserState)
         sizeof(float) * 3 +    // Vector3    GazeSpherePosition;
-        sizeof(float) * 2;     // to float converted booleans   responseGiven and respondedTargetPresent
+        sizeof(float) * 2;     // to float converted booleans   responseGiven, respondedTargetPresent, playerReady
 
 
     public Vector3      GazeSpherePosition;
     public bool         responseGiven;
-    public bool         respondedTargetPresent;
+    //public bool         respondedTargetPresent;
+    public bool         playerReady;
  
     byte[] Cache = new byte[SIZE];
 
@@ -155,7 +156,8 @@ public class UserState : NetworkData
 
         SerializationHelper.FromBytes(data, ref head, ref GazeSpherePosition);
         SerializationHelper.FromBytes(data, ref head, ref responseGiven);
-        SerializationHelper.FromBytes(data, ref head, ref respondedTargetPresent);
+        //SerializationHelper.FromBytes(data, ref head, ref respondedTargetPresent);
+        SerializationHelper.FromBytes(data, ref head, ref playerReady);
     }
 
     public byte[] Serialize()
@@ -165,7 +167,8 @@ public class UserState : NetworkData
 
         SerializationHelper.ToBytes(ref GazeSpherePosition, Cache, ref head);
         SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
-        SerializationHelper.ToBytes(Convert.ToSingle(respondedTargetPresent), Cache, ref head);
+        //SerializationHelper.ToBytes(Convert.ToSingle(respondedTargetPresent), Cache, ref head);
+        SerializationHelper.ToBytes(Convert.ToSingle(playerReady), Cache, ref head);
         
 
         return Cache;

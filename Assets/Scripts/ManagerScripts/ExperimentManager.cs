@@ -12,11 +12,13 @@ public class ExperimentManager : MonoBehaviour
     
     // TODO: Try remote and local bool variables
     public bool LocalResponseGiven;
-    public bool LocalRespondedTargetPresent;
+    //public bool LocalRespondedTargetPresent;
     
     public bool RemoteResponseGiven;
-    public bool RemoteRespondedTargetPresent;
-    
+    //public bool RemoteRespondedTargetPresent;
+
+    public bool LocalPlayerReady;
+    public bool RemotePlayerReady;
     
     //
 
@@ -84,7 +86,8 @@ public class ExperimentManager : MonoBehaviour
 
         //
         RemoteResponseGiven = incomingState.responseGiven;
-        RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
+        //RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
+        RemotePlayerReady = incomingState.playerReady;
 
         //EyetrackingRemote
 
@@ -226,7 +229,8 @@ public class ExperimentManager : MonoBehaviour
     {
         if (NetMan.GetState() == ENetworkState.Running)
         {
-            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent);
+            //NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent, LocalPlayerReady);
+            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalPlayerReady);
          //   NetMan.BroadcastVRAvatarUpdate(LocalHead, LocalHandLeft, LocalHandRight);
         }
 

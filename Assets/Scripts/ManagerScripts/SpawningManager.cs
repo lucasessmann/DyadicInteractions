@@ -24,8 +24,9 @@ public class SpawningManager : MonoBehaviour
     private int[] _stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
-    
-    
+
+    public int numberOfTrials = 5; // Originally 192
+    public int currentTrial = 0;
     public int randomSeed = 7;
 
     public float stimuliOnsetTime;
@@ -53,41 +54,49 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-        // Just for testing
-        // TODO: delete later
-        if (Input.GetKeyDown(KeyCode.T))
+
+        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady && currentTrial <= numberOfTrials)
         {
             SpawnStimuli();
+            
         }
         
-        if(_experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven)
+        if(CheckAlreadyAnswered())
         {
-            //HandleResponse(_experimentManager.respondedTargetPresent);
             GiveTargetFeedback();
         }
-
-        // DUMMY ANSWERS 
+        
         //TODO: Connect with GUI buttons
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
         {
             HandleResponse(true);
-            //SpawnStimuli();
         }
 
-        if (Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.N) & !CheckAlreadyAnswered())
         {
             HandleResponse(false);
-            //SpawnStimuli();
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            _experimentManager.LocalResponseGiven = false;
+            _experimentManager.LocalPlayerReady = true;
+        }
+
+    }
+
+    private bool CheckAlreadyAnswered()
+    {
+        return _experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven;
     }
 
     private void HandleResponse(bool answeredPresent)
     {
         _lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
-        _experimentManager.LocalRespondedTargetPresent = answeredPresent;
-        //CheckAnswer(answeredPresent);
+        //_experimentManager.LocalRespondedTargetPresent = answeredPresent;
 
+        // TODO: CHANGE / REMOVE THIS
         Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + _lastReactionTime + " seconds");
 
@@ -96,8 +105,12 @@ public class SpawningManager : MonoBehaviour
 
     private void SpawnStimuli()
     {
+        
+        // Increment current Trial
+        currentTrial++;
+        
         // Reset Answers
-        _experimentManager.LocalResponseGiven = false;
+        _experimentManager.LocalPlayerReady = false;
 
         // If stimuli already in scene, delete before spawning new ones
         if (_stimuliInScene)
@@ -162,13 +175,16 @@ public class SpawningManager : MonoBehaviour
         return new List<Transform>(result);
     }
 
-    public void GiveTargetFeedback()
+    private void GiveTargetFeedback()
     {
+
         // TODO: Extend Feedback
         if (targetPresent)
         {
             _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
+        
+        
 
         
     }

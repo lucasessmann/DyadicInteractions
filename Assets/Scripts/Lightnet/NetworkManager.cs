@@ -63,7 +63,8 @@ public class NetworkManager : MonoBehaviour
         SendingUserState.HandRightRotation = VRHandRight.rotation;*/
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
     }
-    public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent)
+    //public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent, bool playerReady)
+    public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool playerReady)
     {
         
         /*
@@ -84,7 +85,8 @@ public class NetworkManager : MonoBehaviour
         */
         SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
         SendingUserState.responseGiven = responseGiven;
-        SendingUserState.respondedTargetPresent = respondedTargetPresent;
+        //SendingUserState.respondedTargetPresent = respondedTargetPresent;
+        SendingUserState.playerReady = playerReady;
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
     }
 
