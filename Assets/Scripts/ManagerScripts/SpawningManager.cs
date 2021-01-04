@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
 using Random = System.Random;
 
 public class SpawningManager : MonoBehaviour
@@ -30,6 +31,11 @@ public class SpawningManager : MonoBehaviour
 
     public float stimuliOnsetTime;
     private float _lastReactionTime;
+    
+    // Controllers
+    public SteamVR_Action_Boolean grabPinch;
+    public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
+    public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
 
     private void Start()
     {
@@ -71,6 +77,29 @@ public class SpawningManager : MonoBehaviour
             CheckAnswer(false);
             //SpawnStimuli();
         }
+        
+   
+       
+
+    }
+    private void OnEnable()
+    {
+        grabPinch.AddOnStateDownListener(TargetPresentTrigger, leftInput); 
+        grabPinch.AddOnStateDownListener(TargetNotPresentTrigger, rightInput);
+    }
+    
+    private void TargetPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+    {
+        _lastReactionTime = Time.time - stimuliOnsetTime;
+        CheckAnswer(true);
+        print("Present");
+    }
+
+    private void TargetNotPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+    {
+        _lastReactionTime = Time.time - stimuliOnsetTime;
+        CheckAnswer(false);
+        print("Not present");
     }
 
     private void CheckAnswer(bool response)
