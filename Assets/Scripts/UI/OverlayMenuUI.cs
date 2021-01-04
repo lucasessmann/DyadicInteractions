@@ -9,8 +9,10 @@ using Valve.VR.InteractionSystem;
 
 public class OverlayMenuUI : MonoBehaviour
 {
-    public GameObject cogWheelCanvas;
-    public GameObject menuCanvas;
+    #region Initialisation
+    
+    public GameObject uiCanvas;
+    public GameObject menuOverlay;
     public GameObject startButton;
     public GameObject settingsButton;
     public GameObject settingsTab;
@@ -19,12 +21,15 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject pauseButton;
     public GameObject resumeButton;
     public GameObject endExpButton;
+    public GameObject exitTab;
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
+    public bool hmdUsed = false;
     public bool enableEyeTracking = false;
     public bool captureData = false;
     public bool paused = false;
+    private bool endPressed = false;
     private bool settingPressed = false;
     private bool calPressed = false;
     private bool valPressed = false;
@@ -38,28 +43,29 @@ public class OverlayMenuUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cogWheelCanvas.SetActive((true)); 
-        menuCanvas.SetActive(false);
+        uiCanvas.SetActive(true);
+        menuOverlay.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
+
+    #region Button Functions
+
+    #region CogWheelButton
     
-    // Functions
     // Open the settings menu
     public void CogWheelButton()
     {
         // On press:
         // activate Menu
-        menuCanvas.SetActive(!menuCanvas.activeSelf);
+        menuOverlay.SetActive(!menuOverlay.activeSelf);
         // Deactivate sub menus in case they were opened before
-        settingsTab.SetActive((false));
+        settingsTab.SetActive(false);
         settingPressed = false;
         calPressed = false;
         valPressed = false;
+        exitTab.SetActive(false);
+        endPressed = false;
         // Activate pause or resume button
         if (paused)
         {
@@ -116,11 +122,18 @@ public class OverlayMenuUI : MonoBehaviour
         }
     }
 
+    #endregion
+    
+    #region Start Button
+    
     public void StartExperiment()
     {
         // Start Experiment Scene Switch
     }
 
+    #endregion
+    
+    #region Settings
     // Settings Button
     public void SettingsButton()
     {
@@ -177,12 +190,19 @@ public class OverlayMenuUI : MonoBehaviour
              pauseButton.GetComponent<LeanButton>().interactable = makeInteractable;
              resumeButton.GetComponent<LeanButton>().interactable = makeInteractable;
              endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
-            settingPressed = true;
-            settingsTab.SetActive(true);
-            settingsTab.SetActive(true);
+             settingPressed = true;
+             settingsTab.SetActive(true);
          }
     }
-    
+
+    public void HmdUseEnable()
+    {
+        hmdUsed = true;
+    }
+    public void HmdUseDisable()
+    {
+        hmdUsed = false;
+    }
     public void DataCaptureEnable()
     {
         captureData = true;
@@ -208,6 +228,10 @@ public class OverlayMenuUI : MonoBehaviour
         subId1done = true;
     }
 
+    #endregion
+    
+    #region CalibrationValidation
+    
     // Calibration button
     public void CalibrationButton()
     {
@@ -278,13 +302,109 @@ public class OverlayMenuUI : MonoBehaviour
             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
             endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
-        
     }
+    #endregion
+    
+    #region End Experiment
     // End experiment button
     public void EndExperiment()
     {
-        // Are you sure stuff 
+         if (endPressed) 
+         {
+             // Setting the button color
+             startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+             resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+             resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            
+             
+             makeInteractable = true;
+             // reactivate the other buttons
+             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             pauseButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             resumeButton.GetComponent<LeanButton>().interactable = makeInteractable;
+  
+             
+             endPressed = false; 
+             exitTab.SetActive(false); 
+             exitTab.SetActive(false);
+         }
+         else 
+         {
+             // Setting the button color
+             startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             calibrationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             validationButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             pauseButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             resumeButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+             resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+             
+             
+             makeInteractable = false;
+             // reactivate the other buttons
+             startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             pauseButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             resumeButton.GetComponent<LeanButton>().interactable = makeInteractable;
+             endPressed = true; 
+             exitTab.SetActive(true);
+         }
+    }
+    public void SureYes()
+    {
+        // Stop Experiment
+    }
+    public void SureNo()
+    {
+        exitTab.SetActive(false);
+        
+        // Setting the button color
+        startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        calibrationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        calibrationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        validationButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        validationButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        pauseButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        pauseButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        resumeButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+        resumeButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+        
+        makeInteractable = true;
+        // reactivate the other buttons
+        startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        pauseButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        resumeButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        
+        endPressed = false; 
     }
     
+    #endregion
+    
+    #endregion
     
 }
