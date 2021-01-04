@@ -66,26 +66,24 @@ public class SpawningManager : MonoBehaviour
             SpawnStimuli();
         }
 
-        if (grabPinch.GetStateDown(leftInput))
-        {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(true);
-        }
-
-        if ( grabPinch.GetStateDown(rightInput))
-        {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(false);
-        }
-
         
-        
+
         if(CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
         }
         
-        //TODO: Connect with GUI buttons
+        if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
+        {
+            HandleResponse(true);
+        }
+
+        if (grabPinch.GetStateDown(rightInput) & !CheckAlreadyAnswered())
+        {
+            HandleResponse(false);
+        }
+        
+        //
         if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
         {
             HandleResponse(true);
