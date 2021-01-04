@@ -2222,6 +2222,11 @@ MonoBehaviour:
   stimulusPresenceRate: 0.5
   targetPresent: 0
   stimuliOnsetTime: 0
+  grabPinch:
+    actionPath: /actions/default/in/GrabPinch
+    needsReinit: 0
+  leftInput: 1
+  rightInput: 2
 --- !u!4 &2040711735
 Transform:
   m_ObjectHideFlags: 0
