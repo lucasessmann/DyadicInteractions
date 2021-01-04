@@ -735,6 +735,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LocalGazeSphere: {fileID: 69397192}
   RemoteGazeSphere: {fileID: 1967471895}
+  LocalResponseGiven: 0
+  RemoteResponseGiven: 0
+  LocalPlayerReady: 0
+  RemotePlayerReady: 0
   WarmUpTime: 3
   InterpolationFactor: 5
   NetMan: {fileID: 309331644}
@@ -8001,9 +8005,13 @@ MonoBehaviour:
     type: 3}
   stimulusPresenceRate: 0.5
   targetPresent: 0
+  answeredPresent: 0
+  numberOfTrials: 5
+  currentTrial: 0
+  randomSeed: 7
   stimuliOnsetTime: 0
   grabPinch:
-    actionPath: /actions/default/in/GrabPinch
+    actionPath: 
     needsReinit: 0
   leftInput: 1
   rightInput: 2

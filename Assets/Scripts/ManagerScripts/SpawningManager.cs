@@ -21,6 +21,7 @@ public class SpawningManager : MonoBehaviour
 
     private bool _stimuliInScene = false;
     public bool targetPresent;
+    public bool answeredPresent;
     
     private int[] _stimuliSizes = {21, 35};
     private int _stimuliSize;
@@ -32,6 +33,7 @@ public class SpawningManager : MonoBehaviour
 
     public float stimuliOnsetTime;
     private float _lastReactionTime;
+    // TODO: SAVE ANSWER IN VARIABLE
     
     private GameObject[] _stimuliGOs;
     private Random _rnd;
@@ -66,22 +68,21 @@ public class SpawningManager : MonoBehaviour
             SpawnStimuli();
         }
 
-        
-
         if(CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
         }
         
-        if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
-        {
-            HandleResponse(true);
-        }
-
-        if (grabPinch.GetStateDown(rightInput) & !CheckAlreadyAnswered())
-        {
-            HandleResponse(false);
-        }
+        // UNCOMMENT FOR VR CONTROLLER USE
+        // if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
+        // {
+        //     HandleResponse(true);
+        // }
+        //
+        // if (grabPinch.GetStateDown(rightInput) & !CheckAlreadyAnswered())
+        // {
+        //     HandleResponse(false);
+        // }
         
         //
         if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
@@ -107,11 +108,11 @@ public class SpawningManager : MonoBehaviour
         return _experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven;
     }
 
-    private void HandleResponse(bool answeredPresent)
+    private void HandleResponse(bool answer)
     {
         _lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
-        //_experimentManager.LocalRespondedTargetPresent = answeredPresent;
+        answeredPresent = answer;
 
         // TODO: CHANGE / REMOVE THIS
         Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
