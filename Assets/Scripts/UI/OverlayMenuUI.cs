@@ -11,8 +11,8 @@ public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
     
-    public GameObject cogWheelCanvas;
-    public GameObject menuCanvas;
+    public GameObject uiCanvas;
+    public GameObject menuOverlay;
     public GameObject startButton;
     public GameObject settingsButton;
     public GameObject settingsTab;
@@ -41,8 +41,8 @@ public class OverlayMenuUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cogWheelCanvas.SetActive((true)); 
-        menuCanvas.SetActive(false);
+        uiCanvas.SetActive(true);
+        menuOverlay.SetActive(false);
     }
 
     #endregion
@@ -56,7 +56,7 @@ public class OverlayMenuUI : MonoBehaviour
     {
         // On press:
         // activate Menu
-        menuCanvas.SetActive(!menuCanvas.activeSelf);
+        menuOverlay.SetActive(!menuOverlay.activeSelf);
         // Deactivate sub menus in case they were opened before
         settingsTab.SetActive((false));
         settingPressed = false;
@@ -187,7 +187,6 @@ public class OverlayMenuUI : MonoBehaviour
              resumeButton.GetComponent<LeanButton>().interactable = makeInteractable;
              endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
             settingPressed = true;
-            settingsTab.SetActive(true);
             settingsTab.SetActive(true);
          }
     }
