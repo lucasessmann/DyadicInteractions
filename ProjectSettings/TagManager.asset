@@ -8,6 +8,14 @@ TagManager:
   - FxTemporaire
   - distractor
   - stimulus
+  - Wall
+  - Floor
+  - Roof
+  - Armchair
+  - Painting
+  - Standing Lamp
+  - Door
+  - Wall of Fame
   layers:
   - Default
   - TransparentFX

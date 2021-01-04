@@ -105,7 +105,9 @@ public class SpawningManager : MonoBehaviour
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
         _stimuliSize = _stimuliSizes[_rnd.Next(_stimuliSizes.Length)];
-        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21)  : _spawnPointsList;
+     
+
 
 
         if (targetPresent)
