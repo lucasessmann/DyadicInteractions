@@ -55,6 +55,18 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
+
+        if (grabPinch.GetStateDown(leftInput))
+        {
+            _lastReactionTime = Time.time - stimuliOnsetTime;
+            CheckAnswer(true);
+        }
+
+        if ( grabPinch.GetStateDown(rightInput))
+        {
+            _lastReactionTime = Time.time - stimuliOnsetTime;
+            CheckAnswer(false);
+        }
         // Just for testing
         // TODO: delete later
         if (Input.GetKeyDown(KeyCode.T))
@@ -82,13 +94,10 @@ public class SpawningManager : MonoBehaviour
        
 
     }
-    private void OnEnable()
-    {
-        grabPinch.AddOnStateDownListener(TargetPresentTrigger, leftInput); 
-        grabPinch.AddOnStateDownListener(TargetNotPresentTrigger, rightInput);
-    }
-    
-    private void TargetPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+
+
+
+        private void TargetPresentTrigger(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
     {
         _lastReactionTime = Time.time - stimuliOnsetTime;
         CheckAnswer(true);
