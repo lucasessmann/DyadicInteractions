@@ -9,6 +9,8 @@ using Valve.VR.InteractionSystem;
 
 public class OverlayMenuUI : MonoBehaviour
 {
+    #region Initialisation
+    
     public GameObject cogWheelCanvas;
     public GameObject menuCanvas;
     public GameObject startButton;
@@ -22,6 +24,7 @@ public class OverlayMenuUI : MonoBehaviour
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
+    public bool hmdUsed = false;
     public bool enableEyeTracking = false;
     public bool captureData = false;
     public bool paused = false;
@@ -42,13 +45,12 @@ public class OverlayMenuUI : MonoBehaviour
         menuCanvas.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
+
+    #region Button Functions
+
+    #region CogWheelButton
     
-    // Functions
     // Open the settings menu
     public void CogWheelButton()
     {
@@ -116,11 +118,18 @@ public class OverlayMenuUI : MonoBehaviour
         }
     }
 
+    #endregion
+    
+    #region Start Button
+    
     public void StartExperiment()
     {
         // Start Experiment Scene Switch
     }
 
+    #endregion
+    
+    #region Settings
     // Settings Button
     public void SettingsButton()
     {
@@ -182,7 +191,15 @@ public class OverlayMenuUI : MonoBehaviour
             settingsTab.SetActive(true);
          }
     }
-    
+
+    public void HmdUseEnable()
+    {
+        hmdUsed = true;
+    }
+    public void HmdUseDisable()
+    {
+        hmdUsed = false;
+    }
     public void DataCaptureEnable()
     {
         captureData = true;
@@ -208,6 +225,10 @@ public class OverlayMenuUI : MonoBehaviour
         subId1done = true;
     }
 
+    #endregion
+    
+    #region CalibrationValidation
+    
     // Calibration button
     public void CalibrationButton()
     {
@@ -278,13 +299,18 @@ public class OverlayMenuUI : MonoBehaviour
             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
             endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
         }
-        
     }
+    #endregion
+    
+    #region End Experiment
     // End experiment button
     public void EndExperiment()
     {
         // Are you sure stuff 
     }
     
+    #endregion
+    
+    #endregion
     
 }
