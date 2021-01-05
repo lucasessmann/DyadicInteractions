@@ -47,6 +47,14 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
+			// Raycasting and moving gaze sphere
+
+			Ray gazeRay = cam.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(gazeRay, out hit, 100f))
+			{
+				gazeSphere.transform.position = hit.point;
+			}
 
 			// until here
 			float forward = 0.0f;
@@ -72,7 +80,7 @@ namespace Valve.VR.InteractionSystem
                 up -= 1.0f;
             }*/
 
-            float right = 0.0f;
+            // float right = 0.0f;
 			if ( Input.GetKey( KeyCode.D ) || Input.GetKey( KeyCode.RightArrow ) )
 			{
 				//right += 1.0f;
@@ -113,18 +121,14 @@ namespace Valve.VR.InteractionSystem
 				Vector3 offset = mousePosition - startMousePosition;
 				transform.localEulerAngles = startEulerAngles + new Vector3( -offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f );
 			}
+			
+
 		}
+		
 
 		private void FixedUpdate()
 		{
-			// added by Jasmin
 
-			Ray gazeRay = cam.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast(gazeRay, out hit, 100f))
-			{
-				gazeSphere.transform.position = hit.point;
-			}
 			
 
 		}
