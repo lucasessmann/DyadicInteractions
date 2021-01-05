@@ -38,8 +38,11 @@ public class SpawningManager : MonoBehaviour
     private GameObject[] _stimuliGOs;
     private Random _rnd;
     
+
     // Controllers
+    public OverlayMenuUI overlayScript;
     public SteamVR_Action_Boolean grabPinch;
+    public SteamVR_Action_Boolean grabGrip;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
 
@@ -62,45 +65,55 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-
-        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady && currentTrial <= numberOfTrials)
+        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
+            currentTrial <= numberOfTrials)
         {
             SpawnStimuli();
         }
 
-        if(CheckAlreadyAnswered())
+        if (CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
         }
-        
-        // UNCOMMENT FOR VR CONTROLLER USE
-        // if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
-        // {
-        //     HandleResponse(true);
-        // }
-        //
-        // if (grabPinch.GetStateDown(rightInput) & !CheckAlreadyAnswered())
-        // {
-        //     HandleResponse(false);
-        // }
-        
-        //
-        if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
-        {
-            HandleResponse(true);
-        }
 
-        if (Input.GetKeyDown(KeyCode.N) & !CheckAlreadyAnswered())
+        if (overlayScript.hmdUsed)
         {
-            HandleResponse(false);
-        }
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
+            {
+                _experimentManager.LocalResponseGiven = false;
 
-        if (Input.GetKeyDown(KeyCode.R))
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
+            }
+
+            if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(true);
+            }
+
+            if (grabPinch.GetStateDown(rightInput))
+            {
+                HandleResponse(false);
+            }
+        }
+        else
         {
-            _experimentManager.LocalResponseGiven = false;
-            _experimentManager.LocalPlayerReady = true;
-        }
+            if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(true);
+            }
 
+            if (Input.GetKeyDown(KeyCode.N) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _experimentManager.LocalResponseGiven = false;
+
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
+            }
+        }
     }
 
     private bool CheckAlreadyAnswered()
