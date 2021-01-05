@@ -290,13 +290,13 @@ public class OverlayMenuUI : MonoBehaviour
     {
         hmdUsed = true;
         //playerSteam.SetActive(true);
-        // playerSteam.GetComponent<Player>().useHDMI = true;
+        // playerSteam.GetComponent<Player>().useHDM = true;
     }
     public void HmdUseDisable()
     {
         hmdUsed = false;
         // layerSteam.SetActive(true);
-        // playerSteam.GetComponent<Player>().useHDMI = false;
+        // playerSteam.GetComponent<Player>().useHDM = false;
     }
     public void DataCaptureEnable()
     {
