@@ -4,6 +4,7 @@
 //
 //=============================================================================
 
+using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,6 +29,12 @@ namespace Valve.VR.InteractionSystem
 		private Vector3 startEulerAngles;
 		private Vector3 startMousePosition;
 		private float realTime;
+		//-----------------------------------------------------
+		void Start()
+		{
+			gazeSphere = GameObject.Find("GazeSphereLocal");
+        
+		}
 
 		//-------------------------------------------------
 		void OnEnable()
@@ -40,7 +47,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
-			// added by Jasmin
+			// Raycasting and moving gaze sphere
 
 			Ray gazeRay = cam.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
@@ -48,7 +55,7 @@ namespace Valve.VR.InteractionSystem
 			{
 				gazeSphere.transform.position = hit.point;
 			}
-			
+
 			// until here
 			float forward = 0.0f;
 			if ( Input.GetKey( KeyCode.W ) || Input.GetKey( KeyCode.UpArrow ) )
@@ -73,7 +80,7 @@ namespace Valve.VR.InteractionSystem
                 up -= 1.0f;
             }*/
 
-            float right = 0.0f;
+            // float right = 0.0f;
 			if ( Input.GetKey( KeyCode.D ) || Input.GetKey( KeyCode.RightArrow ) )
 			{
 				//right += 1.0f;
@@ -114,6 +121,16 @@ namespace Valve.VR.InteractionSystem
 				Vector3 offset = mousePosition - startMousePosition;
 				transform.localEulerAngles = startEulerAngles + new Vector3( -offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f );
 			}
+			
+
+		}
+		
+
+		private void FixedUpdate()
+		{
+
+			
+
 		}
 
 
