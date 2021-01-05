@@ -38,9 +38,11 @@ public class SpawningManager : MonoBehaviour
     private GameObject[] _stimuliGOs;
     private Random _rnd;
     
+
     // Controllers
     public OverlayMenuUI overlayScript;
     public SteamVR_Action_Boolean grabPinch;
+    public SteamVR_Action_Boolean grabGrip;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
 
@@ -63,41 +65,34 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady && currentTrial <= numberOfTrials)
+        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
+            currentTrial <= numberOfTrials)
         {
             SpawnStimuli();
         }
-        
+
         if (CheckAlreadyAnswered())
         {
-            GiveTargetFeedback();    
+            GiveTargetFeedback();
         }
-                
+
         if (overlayScript.hmdUsed)
         {
             if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
             {
                 _experimentManager.LocalResponseGiven = false;
-                
-                if (_experimentManager.LocalPlayerReady)
-                {
-                    readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
-                    _experimentManager.LocalPlayerReady = false;
-                }
-                else
-                {
-                    readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
-                    _experimentManager.LocalPlayerReady = true;
-                }
+
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
-            if (grabPinch.GetStateDown(leftInput) !CheckAlreadyAnswered())
+
+            if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
             {
-                HandleResponse(true)
+                HandleResponse(true);
             }
 
             if (grabPinch.GetStateDown(rightInput))
             {
-                HandleResponse(false)
+                HandleResponse(false);
             }
         }
         else
@@ -106,6 +101,7 @@ public class SpawningManager : MonoBehaviour
             {
                 HandleResponse(true);
             }
+
             if (Input.GetKeyDown(KeyCode.N) & !CheckAlreadyAnswered())
             {
                 HandleResponse(false);
@@ -114,19 +110,10 @@ public class SpawningManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 _experimentManager.LocalResponseGiven = false;
-                
-                if (_experimentManager.LocalPlayerReady)
-                {
-                    readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
-                    _experimentManager.LocalPlayerReady = false;
-                }
-                else
-                {
-                    readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
-                    _experimentManager.LocalPlayerReady = true;
-                }
-                
+
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
+        }
     }
 
     private bool CheckAlreadyAnswered()

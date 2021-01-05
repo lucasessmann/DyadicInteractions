@@ -10978,8 +10978,11 @@ MonoBehaviour:
   currentTrial: 0
   randomSeed: 7
   stimuliOnsetTime: 0
-  overlayScript: {fileID: 0}
+  overlayScript: {fileID: 842397237716256114}
   grabPinch:
+    actionPath: 
+    needsReinit: 0
+  grabGrip:
     actionPath: 
     needsReinit: 0
   leftInput: 1
