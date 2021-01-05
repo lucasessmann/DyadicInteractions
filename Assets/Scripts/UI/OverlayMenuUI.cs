@@ -12,6 +12,9 @@ using Valve.VR.InteractionSystem;
 public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
+    // public GameObject playerSteam;
+    public GameObject VRcamera;
+    public GameObject EyeTrackingManager;
 
     private ExperimentManager _experimentManager;
     public GameObject uiCanvas;
@@ -65,6 +68,12 @@ public class OverlayMenuUI : MonoBehaviour
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
         _experimentManager = GetComponentInParent<ExperimentManager>();
+        
+        // playerSteam = GameObject.Find("PlayerSTEAM");
+        VRcamera = GameObject.Find("VRCamera");
+        EyeTrackingManager = GameObject.Find("EyeTrackingManager");
+
+
         
         // Start Button deactivated
         startButton.GetComponent<LeanButton>().interactable = false;
@@ -203,6 +212,7 @@ public class OverlayMenuUI : MonoBehaviour
         endPressed = false;
         
         // Start Experiment Scene Switch
+        _experimentManager.startExperimentPress = true;
 
     }
 
