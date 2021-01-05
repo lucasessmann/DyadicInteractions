@@ -57,10 +57,6 @@ public class OverlayMenuUI : MonoBehaviour
     private Color ogTextColor = new Color (1f,1f,1f,1f);
     private Color lessSatTextColor = new Color (1f,1f,1f,0.3f);
     
-    // Controllers
-    public SteamVR_Action_Boolean grabGrip;
-    public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
-    public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
     
     
     // Start is called before the first frame update
@@ -68,11 +64,19 @@ public class OverlayMenuUI : MonoBehaviour
     {
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
+        _experimentManager = GetComponentInParent<ExperimentManager>();
     }
 
     private void Update()
     {
-
+        if (_experimentManager.LocalPlayerReady)
+        {
+            readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
+        }
+        else
+        {
+            readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
+        }
     }
 
     #endregion
@@ -674,7 +678,6 @@ public class OverlayMenuUI : MonoBehaviour
     }
 
     #endregion
-    
 
     #region End Experiment
     // End experiment button

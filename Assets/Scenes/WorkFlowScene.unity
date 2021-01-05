@@ -968,10 +968,10 @@ Transform:
   - {fileID: 2040711735}
   - {fileID: 1855094852}
   - {fileID: 1362018550}
+  - {fileID: 842397237716256112}
   - {fileID: 355370622}
   - {fileID: 1525231798}
   - {fileID: 309331647}
-  - {fileID: 842397237716256112}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1694,7 +1694,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 198865464}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &323255595
 GameObject:
@@ -1917,7 +1917,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 198865464}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &355370623
 MonoBehaviour:
@@ -8577,7 +8577,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 198865464}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1525231799
 MonoBehaviour:
@@ -10980,10 +10980,10 @@ MonoBehaviour:
   stimuliOnsetTime: 0
   overlayScript: {fileID: 842397237716256114}
   grabPinch:
-    actionPath: 
+    actionPath: /actions/default/in/GrabPinch
     needsReinit: 0
   grabGrip:
-    actionPath: 
+    actionPath: /actions/default/in/GrabGrip
     needsReinit: 0
   leftInput: 1
   rightInput: 2
@@ -11453,7 +11453,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 198865464}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &842397237716256113
 MonoBehaviour:
