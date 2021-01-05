@@ -62,6 +62,7 @@ public class SpawningManager : MonoBehaviour
             {
                 _lastReactionTime = Time.time - stimuliOnsetTime;
                 CheckAnswer(true);
+                Debug.Log("Pressing worked");
             }
 
             if (grabPinch.GetStateDown(rightInput))

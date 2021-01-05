@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Lean.Gui;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Valve.VR;
 using Valve.VR.InteractionSystem;
 
 public class OverlayMenuUI : MonoBehaviour
@@ -29,6 +31,7 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject resumeButton;
     public GameObject endExpButton;
     public GameObject exitTab;
+    public GameObject readyButton;
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
@@ -36,6 +39,7 @@ public class OverlayMenuUI : MonoBehaviour
     public bool enableEyeTracking = false;
     public bool captureData = false;
     public bool paused = false;
+    public bool readyBool = false;
     private bool endPressed = false;
     private bool settingPressed = false;
     private bool subjectsettingPressed = false;
@@ -52,12 +56,30 @@ public class OverlayMenuUI : MonoBehaviour
     private Color ogTextColor = new Color (1f,1f,1f,1f);
     private Color lessSatTextColor = new Color (1f,1f,1f,0.3f);
     
+    // Controllers
+    public SteamVR_Action_Boolean grabGrip;
+    public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
+    public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
+    
     
     // Start is called before the first frame update
     void Start()
     {
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (hmdUsed)
+        {
+            ReadyButtonController();
+        }
+        else
+        {
+            ReadyButtonNoController();
+        }
+        
     }
 
     #endregion
@@ -655,6 +677,44 @@ public class OverlayMenuUI : MonoBehaviour
             calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
             endExpButton.GetComponent<LeanButton>().interactable = makeInteractable;
+        }
+    }
+
+    #endregion
+
+    #region Ready Button
+
+    private void ReadyButtonController()
+    {
+        if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
+        {
+            if (readyBool)
+            {
+                readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
+                readyBool = false;
+            }
+            else
+            {
+                readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
+                readyBool = true;
+            }
+        }
+    }
+
+    private void ReadyButtonNoController()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (readyBool)
+            {
+                readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
+                readyBool = false;
+            }
+            else
+            {
+                readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
+                readyBool = true;
+            }
         }
     }
 
