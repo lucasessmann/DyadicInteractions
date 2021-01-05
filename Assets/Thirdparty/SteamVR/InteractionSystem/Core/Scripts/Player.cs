@@ -276,27 +276,26 @@ namespace Valve.VR.InteractionSystem
 		private IEnumerator Start()
 		{
 			_instance = this;
-			if (!useHDMI)
+			// if (!useHDMI)
+			// {
+			// 	ActivateRig( rig2DFallback );
+			// }
+
+			while (SteamVR.initializedState == SteamVR.InitializedStates.None ||
+			       SteamVR.initializedState == SteamVR.InitializedStates.Initializing)
+				yield return null;
+
+			if (SteamVR.instance != null)
 			{
-				ActivateRig( rig2DFallback );
+				ActivateRig(rigSteamVR);
 			}
 			else
 			{
-				while (SteamVR.initializedState == SteamVR.InitializedStates.None ||
-				       SteamVR.initializedState == SteamVR.InitializedStates.Initializing)
-					yield return null;
-
-				if (SteamVR.instance != null)
-				{
-					ActivateRig(rigSteamVR);
-				}
-				else
-				{
 #if !HIDE_DEBUG_UI
-					ActivateRig(rig2DFallback);
+				ActivateRig(rig2DFallback);
 #endif
-				}
 			}
+			
 		}
 
         protected virtual void Update()
