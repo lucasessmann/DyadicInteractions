@@ -12,7 +12,8 @@ using Valve.VR.InteractionSystem;
 public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
-    
+
+    private ExperimentManager _experimentManager;
     public GameObject uiCanvas;
     public GameObject menuOverlay;
     public GameObject startButton;
@@ -71,15 +72,7 @@ public class OverlayMenuUI : MonoBehaviour
 
     private void Update()
     {
-        if (hmdUsed)
-        {
-            ReadyButtonController();
-        }
-        else
-        {
-            ReadyButtonNoController();
-        }
-        
+
     }
 
     #endregion
@@ -681,44 +674,7 @@ public class OverlayMenuUI : MonoBehaviour
     }
 
     #endregion
-
-    #region Ready Button
-
-    private void ReadyButtonController()
-    {
-        if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
-        {
-            if (readyBool)
-            {
-                readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
-                readyBool = false;
-            }
-            else
-            {
-                readyButton.transform.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
-                readyBool = true;
-            }
-        }
-    }
-
-    private void ReadyButtonNoController()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (readyBool)
-            {
-                readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
-                readyBool = false;
-            }
-            else
-            {
-                readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
-                readyBool = true;
-            }
-        }
-    }
-
-    #endregion
+    
 
     #region End Experiment
     // End experiment button
