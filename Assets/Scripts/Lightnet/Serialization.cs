@@ -11,6 +11,19 @@ public static class SerializationHelper
         return value;
     }
 
+    // public static bool FromBytes(byte[] data, ref int offset, ref bool boolValue)
+    // {
+    //     Debug.Assert(offset + sizeof(bool) <= data.Length);
+    //     float value = BitConverter.ToSingle(data, offset);
+    //     offset += sizeof(bool);
+    //     return Convert.ToBoolean(value);
+    // }
+
+    public static void FromBytes(byte[] data, ref int offset, ref bool boolValue)
+    {
+        boolValue = Convert.ToBoolean(FromBytes(data, ref offset));
+    }
+
     public static void FromBytes(byte[] data, ref int offset, ref Vector3 vector)
     {
         vector.x = FromBytes(data, ref offset);
@@ -37,6 +50,14 @@ public static class SerializationHelper
     public static void ToBytes(float value, byte[] data, ref int offset)
     {
         Debug.Assert(offset + sizeof(float) <= data.Length);
+        byte[] buffer = BitConverter.GetBytes(value);
+        Array.Copy(buffer, 0, data, offset, buffer.Length);
+        offset += buffer.Length;
+    }
+
+    public static void ToBytes(bool value, byte[] data, ref int offset)
+    {
+        Debug.Assert(offset + sizeof(bool) <= data.Length);
         byte[] buffer = BitConverter.GetBytes(value);
         Array.Copy(buffer, 0, data, offset, buffer.Length);
         offset += buffer.Length;
@@ -113,11 +134,15 @@ public class UserState : NetworkData
         // NOTE: using e.g. sizeof(Vector3) is not allowed...
         // so we need to always use sizeof(float) instead
 
-        sizeof(byte) +          // header     (ENetDataType.UserState)
-        sizeof(float) * 3;     // Vector3    GazeSpherePosition;
+        sizeof(byte) +         // header     (ENetDataType.UserState)
+        sizeof(float) * 3 +    // Vector3    GazeSpherePosition;
+        sizeof(float) * 2;     // to float converted booleans   responseGiven, respondedTargetPresent, playerReady
 
 
     public Vector3      GazeSpherePosition;
+    public bool         responseGiven;
+    //public bool         respondedTargetPresent;
+    public bool         playerReady;
  
     byte[] Cache = new byte[SIZE];
 
@@ -130,6 +155,9 @@ public class UserState : NetworkData
         head += sizeof(byte);
 
         SerializationHelper.FromBytes(data, ref head, ref GazeSpherePosition);
+        SerializationHelper.FromBytes(data, ref head, ref responseGiven);
+        //SerializationHelper.FromBytes(data, ref head, ref respondedTargetPresent);
+        SerializationHelper.FromBytes(data, ref head, ref playerReady);
     }
 
     public byte[] Serialize()
@@ -137,7 +165,11 @@ public class UserState : NetworkData
         int head = 0;
         Cache[head] = (byte)ENetDataType.UserState; head += sizeof(byte);
 
-        SerializationHelper.ToBytes(ref GazeSpherePosition,    Cache, ref head);
+        SerializationHelper.ToBytes(ref GazeSpherePosition, Cache, ref head);
+        SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
+        //SerializationHelper.ToBytes(Convert.ToSingle(respondedTargetPresent), Cache, ref head);
+        SerializationHelper.ToBytes(Convert.ToSingle(playerReady), Cache, ref head);
+        
 
         return Cache;
     }
