@@ -989,6 +989,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LocalGazeSphere: {fileID: 69397192}
   RemoteGazeSphere: {fileID: 1967471895}
+  LocalResponseGiven: 0
+  RemoteResponseGiven: 0
+  LocalPlayerReady: 0
+  RemotePlayerReady: 0
   WarmUpTime: 3
   InterpolationFactor: 5
   NetMan: {fileID: 309331644}
@@ -6144,6 +6148,14 @@ PrefabInstance:
       propertyPath: gazeSphere
       value: 
       objectReference: {fileID: 69397188}
+    - target: {fileID: 11476190, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: RotateSpeed
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 11476190, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: showInstructions
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
 --- !u!1 &1129518915
@@ -10961,10 +10973,17 @@ MonoBehaviour:
     type: 3}
   stimulusPresenceRate: 0.5
   targetPresent: 0
+  answeredPresent: 0
+  numberOfTrials: 5
+  currentTrial: 0
+  randomSeed: 7
   stimuliOnsetTime: 0
-  overlayScript: {fileID: 0}
+  overlayScript: {fileID: 842397237716256114}
   grabPinch:
-    actionPath: /actions/default/in/GrabPinch
+    actionPath: 
+    needsReinit: 0
+  grabGrip:
+    actionPath: 
     needsReinit: 0
   leftInput: 1
   rightInput: 2

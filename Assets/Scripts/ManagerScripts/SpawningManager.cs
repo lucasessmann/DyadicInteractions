@@ -17,35 +17,44 @@ public class SpawningManager : MonoBehaviour
 
     private List<Transform> _spawnPointsList = new List<Transform>();
     private List<Transform> _chosenSpawnPoints;
-    private List<Quaternion> _distractorDirectons = new List<Quaternion>();
+    private List<Quaternion> _distractorDirections = new List<Quaternion>();
 
     private bool _stimuliInScene = false;
     public bool targetPresent;
-
-    private GameObject[] _stimuliGOs;
-    private Random _rnd = new Random();
-
+    public bool answeredPresent;
+    
     private int[] _stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
 
+    public int numberOfTrials = 5; // Originally 192
+    public int currentTrial = 0;
+    public int randomSeed = 7;
+
     public float stimuliOnsetTime;
     private float _lastReactionTime;
+    // TODO: SAVE ANSWER IN VARIABLE
     
+    private GameObject[] _stimuliGOs;
+    private Random _rnd;
+    
+
     // Controllers
     public OverlayMenuUI overlayScript;
     public SteamVR_Action_Boolean grabPinch;
+    public SteamVR_Action_Boolean grabGrip;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
 
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
+        _rnd = new Random(randomSeed);
 
-        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 180));
-        _distractorDirectons.Add(Quaternion.Euler(-90, 0, 0));
-        _distractorDirectons.Add(Quaternion.Euler(90, 0, 0));
-        _distractorDirectons.Add(Quaternion.Euler(90, 0, 180));
+        _distractorDirections.Add(Quaternion.Euler(-90, 0, 180));
+        _distractorDirections.Add(Quaternion.Euler(-90, 0, 0));
+        _distractorDirections.Add(Quaternion.Euler(90, 0, 0));
+        _distractorDirections.Add(Quaternion.Euler(90, 0, 180));
 
         // Get transforms of every spawn point "cube" of the empty parent GO "SpawnPoints"
         foreach (Transform child in spawnPointsGameObject.transform)
@@ -56,70 +65,84 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-        if (overlayScript.hmdUsed)
-        {
-            if (grabPinch.GetStateDown(leftInput))
-            {
-                _lastReactionTime = Time.time - stimuliOnsetTime;
-                CheckAnswer(true);
-                Debug.Log("Pressing worked");
-            }
-
-            if (grabPinch.GetStateDown(rightInput))
-            {
-                _lastReactionTime = Time.time - stimuliOnsetTime;
-                CheckAnswer(false);
-            }
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Y))
-            {
-                _lastReactionTime = Time.time - stimuliOnsetTime;
-                CheckAnswer(true);
-                //SpawnStimuli();
-            }
-
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                _lastReactionTime = Time.time - stimuliOnsetTime;
-                CheckAnswer(false);
-                //SpawnStimuli();
-            }
-        }
-        
-        // Just for testing
-        // TODO: delete later
-        if (Input.GetKeyDown(KeyCode.T))
+        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
+            currentTrial <= numberOfTrials)
         {
             SpawnStimuli();
         }
 
-        // DUMMY ANSWERS 
-        //TODO: Connect with GUI buttons
-
-    }
-    
-    private void CheckAnswer(bool response)
-    {
-        //DUMMY FEEBACK
-        // TODO: if response correct and target present -> Highlight Target!
-        if (targetPresent == response)
+        if (CheckAlreadyAnswered())
         {
-            Debug.Log("Correct!");
             GiveTargetFeedback();
+        }
+
+        if (overlayScript.hmdUsed)
+        {
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
+            {
+                _experimentManager.LocalResponseGiven = false;
+
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
+            }
+
+            if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(true);
+            }
+
+            if (grabPinch.GetStateDown(rightInput))
+            {
+                HandleResponse(false);
+            }
         }
         else
         {
-            Debug.Log("Incorrect!");
-            GiveTargetFeedback();
+            if (Input.GetKeyDown(KeyCode.Y) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(true);
+            }
+
+            if (Input.GetKeyDown(KeyCode.N) & !CheckAlreadyAnswered())
+            {
+                HandleResponse(false);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                _experimentManager.LocalResponseGiven = false;
+
+                _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
+            }
         }
-        
+    }
+
+    private bool CheckAlreadyAnswered()
+    {
+        return _experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven;
+    }
+
+    private void HandleResponse(bool answer)
+    {
+        _lastReactionTime = Time.time - stimuliOnsetTime;
+        _experimentManager.LocalResponseGiven = true;
+        answeredPresent = answer;
+
+        // TODO: CHANGE / REMOVE THIS
+        Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + _lastReactionTime + " seconds");
+
+        //GiveTargetFeedback();
     }
 
     private void SpawnStimuli()
     {
+        
+        // Increment current Trial
+        currentTrial++;
+        
+        // Reset Answers
+        _experimentManager.LocalPlayerReady = false;
+
         // If stimuli already in scene, delete before spawning new ones
         if (_stimuliInScene)
         {
@@ -151,7 +174,7 @@ public class SpawningManager : MonoBehaviour
             // Spawn Distractor Objects with randomly preselected orientation
             foreach (var spawnPoint in distractorSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
                 var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
                 tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
@@ -160,7 +183,7 @@ public class SpawningManager : MonoBehaviour
         {
             foreach (var spawnPoint in _chosenSpawnPoints)
             {
-                var distractorDirection = _distractorDirectons[_rnd.Next(_distractorDirectons.Count)];
+                var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
                 var tmpGameObject = Instantiate(distractorPrefab, spawnPoint);
                 tmpGameObject.transform.GetChild(0).rotation = distractorDirection;
             }
@@ -183,11 +206,17 @@ public class SpawningManager : MonoBehaviour
         return new List<Transform>(result);
     }
 
-    public void GiveTargetFeedback()
+    private void GiveTargetFeedback()
     {
+
+        // TODO: Extend Feedback
         if (targetPresent)
         {
-            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.red;
+            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
+        
+        
+
+        
     }
 }
