@@ -10,7 +10,12 @@ using Valve.VR.InteractionSystem;
 public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
-    
+
+    // public GameObject playerSteam;
+    public GameObject VRcamera;
+    public GameObject EyeTrackingManager;
+
+        
     public GameObject uiCanvas;
     public GameObject menuOverlay;
     public GameObject startButton;
@@ -45,6 +50,10 @@ public class OverlayMenuUI : MonoBehaviour
     {
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
+        // playerSteam = GameObject.Find("PlayerSTEAM");
+        VRcamera = GameObject.Find("VRCamera");
+        EyeTrackingManager = GameObject.Find("EyeTrackingManager");
+        
     }
 
     #endregion
@@ -198,10 +207,14 @@ public class OverlayMenuUI : MonoBehaviour
     public void HmdUseEnable()
     {
         hmdUsed = true;
+        // playerSteam.SetActive(true);
+        // playerSteam.GetComponent<Player>().useHDMI = true;
     }
     public void HmdUseDisable()
     {
         hmdUsed = false;
+        // playerSteam.SetActive(true);
+        // playerSteam.GetComponent<Player>().useHDMI = false;
     }
     public void DataCaptureEnable()
     {
@@ -215,10 +228,12 @@ public class OverlayMenuUI : MonoBehaviour
     public void EyeTrackingEnable()
     {
         enableEyeTracking = true;
+        EyeTrackingManager.SetActive(true);
     }
     public void EyeTrackingDisable()
     {
         enableEyeTracking = false;
+        VRcamera.GetComponent<VR_Camera_Tracking>().withEyeTracking = false;
     }
     
     public void SubId1()

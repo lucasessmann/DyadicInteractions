@@ -42,6 +42,8 @@ namespace Valve.VR.InteractionSystem
 
 		public bool allowToggleTo2D = true;
 
+		public bool useHDMI;
+
 
 		//-------------------------------------------------
 		// Singleton instance of the Player. Only one can exist at a time.
@@ -274,21 +276,28 @@ namespace Valve.VR.InteractionSystem
 		private IEnumerator Start()
 		{
 			_instance = this;
-
-            while (SteamVR.initializedState == SteamVR.InitializedStates.None || SteamVR.initializedState == SteamVR.InitializedStates.Initializing)
-                yield return null;
-
-			if ( SteamVR.instance != null )
+			if (!useHDMI)
 			{
-				ActivateRig( rigSteamVR );
+				ActivateRig( rig2DFallback );
 			}
 			else
 			{
+				while (SteamVR.initializedState == SteamVR.InitializedStates.None ||
+				       SteamVR.initializedState == SteamVR.InitializedStates.Initializing)
+					yield return null;
+
+				if (SteamVR.instance != null)
+				{
+					ActivateRig(rigSteamVR);
+				}
+				else
+				{
 #if !HIDE_DEBUG_UI
-				ActivateRig( rig2DFallback );
+					ActivateRig(rig2DFallback);
 #endif
+				}
 			}
-        }
+		}
 
         protected virtual void Update()
         {
