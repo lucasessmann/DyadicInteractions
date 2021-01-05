@@ -4373,6 +4373,14 @@ PrefabInstance:
       propertyPath: gazeSphere
       value: 
       objectReference: {fileID: 69397188}
+    - target: {fileID: 11476190, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: RotateSpeed
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 11476190, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: showInstructions
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
 --- !u!1 &1129518915
@@ -5124,7 +5132,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1252.8658, y: -540}
+  m_AnchoredPosition: {x: 1252.75, y: -540}
   m_SizeDelta: {x: 2283, y: 984}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1285079061
