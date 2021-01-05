@@ -14,6 +14,7 @@ public class OverlayMenuUI : MonoBehaviour
     // public GameObject playerSteam;
     public GameObject VRcamera;
     public GameObject EyeTrackingManager;
+    public GameObject ExperimentManager;
 
         
     public GameObject uiCanvas;
@@ -53,6 +54,7 @@ public class OverlayMenuUI : MonoBehaviour
         // playerSteam = GameObject.Find("PlayerSTEAM");
         VRcamera = GameObject.Find("VRCamera");
         EyeTrackingManager = GameObject.Find("EyeTrackingManager");
+        ExperimentManager = GameObject.Find("ExperimentManager");
         
     }
 
@@ -138,6 +140,7 @@ public class OverlayMenuUI : MonoBehaviour
     public void StartExperiment()
     {
         // Start Experiment Scene Switch
+        ExperimentManager.GetComponent<ExperimentManager>().startExperimentPress = true;
     }
 
     #endregion

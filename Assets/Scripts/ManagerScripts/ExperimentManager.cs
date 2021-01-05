@@ -9,6 +9,8 @@ public class ExperimentManager : MonoBehaviour
     public Transform LocalGazeSphere;
     
     public Transform RemoteGazeSphere;
+    public Transform playerPosition;
+    public Transform startPositionExperiment;
     
     // TODO: Try remote and local bool variables
     public bool LocalResponseGiven;
@@ -18,9 +20,17 @@ public class ExperimentManager : MonoBehaviour
     //public bool RemoteRespondedTargetPresent;
 
     public bool LocalPlayerReady;
+    
     public bool RemotePlayerReady;
     
-    //
+    public bool startExperimentPress= false;
+    public bool useHDMI;
+    public bool withEyeTracking = false;
+    
+    
+    
+    
+    //---------------------------------------------
 
     private static ExperimentManager _Instance;
     public static ExperimentManager Instance()
@@ -37,54 +47,23 @@ public class ExperimentManager : MonoBehaviour
 
     [Header("Required References")]
     public NetworkManager NetMan;
-
-    /*public Transform LocalHead;
-    public Transform LocalHandLeft;
-    public Transform LocalHandRight;
-    public Transform RemoteHead;
-    public Transform RemoteHandLeft;
-    public Transform RemoteHandRight;
-     */
+    
     public TextMesh CountdownDiplay;
+    public GameObject playerSteam;
    
     
 
     private EExperimentStatus Status;
     private float WarmUpTimer;
 
-    public bool ExperimentRoom;
-
-    public void StartExperimentRoom(bool ExperimentRoom)
-    {
-        if (ExperimentRoom)
-        {
-            // NOT VR
-            // move PlayerSteam_NoSteamVRFallbacjObjectsFallbacjobjects to -32,5,0
-            // Rotation is 0, 0, 0
-            
-            // dont know which one to move if using VR
-            // probably VRcamera :D
-        }
-    }
-    /*public DronePositionController dronePositionController;*/
+    
 
 
     public void ReceivedUserStateUpdate(UserState incomingState)
     {
-        /*
-        RemoteHead.position      = Vector3.Lerp(RemoteHead.position,         incomingState.HeadPosition,      Time.deltaTime * InterpolationFactor);
-        RemoteHead.rotation      = Quaternion.Lerp(RemoteHead.rotation,      incomingState.HeadRotation,      Time.deltaTime * InterpolationFactor);
-        RemoteHandLeft.position  = Vector3.Lerp(RemoteHandLeft.position,     incomingState.HandLeftPosition,  Time.deltaTime * InterpolationFactor);
-        RemoteHandLeft.rotation  = Quaternion.Lerp(RemoteHandLeft.rotation,  incomingState.HandLeftRotation,  Time.deltaTime * InterpolationFactor);
-        RemoteHandRight.position = Vector3.Lerp(RemoteHandRight.position,    incomingState.HandRightPosition, Time.deltaTime * InterpolationFactor);
-        RemoteHandRight.rotation = Quaternion.Lerp(RemoteHandRight.rotation, incomingState.HandRightRotation, Time.deltaTime * InterpolationFactor);
-        */
-        
-        //
-        RemoteGazeSphere.position = Vector3.Lerp(RemoteGazeSphere.position,         incomingState.GazeSpherePosition,      Time.deltaTime * InterpolationFactor);
-        //LocalGazeSphere.position  = Vector3.Lerp(LocalGazeSphere.position,          incomingState.GazeSpherePosition,      Time.deltaTime * InterpolationFactor);
 
-        //
+        RemoteGazeSphere.position = Vector3.Lerp(RemoteGazeSphere.position,         incomingState.GazeSpherePosition,      Time.deltaTime * InterpolationFactor);
+
         RemoteResponseGiven = incomingState.responseGiven;
         //RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
         RemotePlayerReady = incomingState.playerReady;
@@ -122,10 +101,6 @@ public class ExperimentManager : MonoBehaviour
         }
         else // Running
         {
-            /*if (NetMan.IsServer())
-            {
-                dronePositionController.Run(true);
-            }*/
             
             CountdownDiplay.gameObject.SetActive(false);
             
@@ -208,18 +183,12 @@ public class ExperimentManager : MonoBehaviour
     
     private void Start()
     {
+
         Debug.Assert(NetMan != null, "Sample Network Manager is not set");
         
         Debug.Assert(RemoteGazeSphere != null, "Remote GazeSphere is not set");
         Debug.Assert(LocalGazeSphere != null, "Local GazeSphere is not set");
-        /*
-        Debug.Assert(LocalHead != null, "Local Head is not set");
-        Debug.Assert(LocalHandLeft != null, "Local Hand Left is not set");
-        Debug.Assert(LocalHandRight != null, "Local Hand Right is not set");
-        Debug.Assert(RemoteHead != null, "Remote Head is not set");
-        Debug.Assert(RemoteHandLeft != null, "Remote Hand Left is not set");
-        Debug.Assert(RemoteHandRight != null, "Remote Hand Right is not set");
-        */
+
         Debug.Assert(CountdownDiplay != null, "Countdown text mesh is not set!");
         
         Status = EExperimentStatus.Waiting;
@@ -227,6 +196,15 @@ public class ExperimentManager : MonoBehaviour
 
     private void Update()
     {
+        if (startExperimentPress)
+        {
+            playerPosition.position = startPositionExperiment.position;
+            playerPosition.localEulerAngles = new Vector3(0, 0, 0);
+            // player is set to ready state
+            // startExperiment = false;
+            // LocalPlayerReady = true;
+        }
+        
         if (NetMan.GetState() == ENetworkState.Running)
         {
             //NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent, LocalPlayerReady);
