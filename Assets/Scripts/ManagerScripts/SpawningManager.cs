@@ -33,6 +33,7 @@ public class SpawningManager : MonoBehaviour
     private float _lastReactionTime;
     
     // Controllers
+    public OverlayMenuUI overlayScript;
     public SteamVR_Action_Boolean grabPinch;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
@@ -55,18 +56,37 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-
-        if (grabPinch.GetStateDown(leftInput))
+        if (overlayScript.hmdUsed)
         {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(true);
-        }
+            if (grabPinch.GetStateDown(leftInput))
+            {
+                _lastReactionTime = Time.time - stimuliOnsetTime;
+                CheckAnswer(true);
+            }
 
-        if (grabPinch.GetStateDown(rightInput))
-        {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(false);
+            if (grabPinch.GetStateDown(rightInput))
+            {
+                _lastReactionTime = Time.time - stimuliOnsetTime;
+                CheckAnswer(false);
+            }
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Y))
+            {
+                _lastReactionTime = Time.time - stimuliOnsetTime;
+                CheckAnswer(true);
+                //SpawnStimuli();
+            }
+
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                _lastReactionTime = Time.time - stimuliOnsetTime;
+                CheckAnswer(false);
+                //SpawnStimuli();
+            }
+        }
+        
         // Just for testing
         // TODO: delete later
         if (Input.GetKeyDown(KeyCode.T))
@@ -76,22 +96,6 @@ public class SpawningManager : MonoBehaviour
 
         // DUMMY ANSWERS 
         //TODO: Connect with GUI buttons
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(true);
-            //SpawnStimuli();
-        }
-
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            _lastReactionTime = Time.time - stimuliOnsetTime;
-            CheckAnswer(false);
-            //SpawnStimuli();
-        }
-        
-   
-       
 
     }
     
