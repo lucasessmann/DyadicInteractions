@@ -76,9 +76,9 @@ public class OverlayMenuUI : MonoBehaviour
 
         
         // Start Button deactivated
-        startButton.GetComponent<LeanButton>().interactable = false;
-        startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-        startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+        //startButton.GetComponent<LeanButton>().interactable = false;
+        //startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+        //startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
     }
 
     private void Update()
@@ -92,7 +92,7 @@ public class OverlayMenuUI : MonoBehaviour
             readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
         }
 
-        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady)
+        /* if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady)
         {
             startButton.GetComponent<LeanButton>().interactable = true;
             startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
@@ -103,7 +103,7 @@ public class OverlayMenuUI : MonoBehaviour
             startButton.GetComponent<LeanButton>().interactable = false;
             startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-        }
+        } */
     }
 
     #endregion
@@ -135,8 +135,8 @@ public class OverlayMenuUI : MonoBehaviour
             resumeButton.SetActive(true);
 
             // color
-            //startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            //startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
+            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             settingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
             settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
             subsettingsButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
@@ -150,7 +150,7 @@ public class OverlayMenuUI : MonoBehaviour
 
             makeInteractable = false;
             // deactivate the buttons
-            //startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
             settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
             calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
             validationButton.GetComponent<LeanButton>().interactable = makeInteractable;
@@ -161,8 +161,8 @@ public class OverlayMenuUI : MonoBehaviour
             pauseButton.SetActive(true);
             resumeButton.SetActive(false);
             // Reset the colors if they have been set before
-            //startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            //startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
+            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
+            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             settingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
             settingsButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
             subsettingsButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
@@ -182,7 +182,7 @@ public class OverlayMenuUI : MonoBehaviour
             
             makeInteractable = true;
             // reactivate the buttons
-            //startButton.GetComponent<LeanButton>().interactable = makeInteractable;
+            startButton.GetComponent<LeanButton>().interactable = makeInteractable;
             settingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
             subsettingsButton.GetComponent<LeanButton>().interactable = makeInteractable;
             calibrationButton.GetComponent<LeanButton>().interactable = makeInteractable;
