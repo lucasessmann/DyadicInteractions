@@ -42,7 +42,7 @@ namespace Valve.VR.InteractionSystem
 
 		public bool allowToggleTo2D = true;
 
-		// public bool useHDM;
+		// public bool useHMD;
 
 
 		//-------------------------------------------------
@@ -276,7 +276,7 @@ namespace Valve.VR.InteractionSystem
 		private IEnumerator Start()
 		{
 			_instance = this;
-			// if (!useHDM)
+			// if (!useHMD)
 			// {
 			// 	ActivateRig( rig2DFallback );
 			// }
