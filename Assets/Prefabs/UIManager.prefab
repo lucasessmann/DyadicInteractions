@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &842397237832327721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 842397237832327735}
+  - component: {fileID: 842397237832327720}
+  - component: {fileID: 842397237832327734}
+  - component: {fileID: 842397237832327733}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &842397237832327735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842397237832327721}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.047388464, y: -0.11343074, z: 2.5552921}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &842397237832327720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842397237832327721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19cabf6fa771e84429fac86f3534a192, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbySceneRunning: 0
+  experimentRunning: 0
+--- !u!114 &842397237832327734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842397237832327721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b0740d52110c1d41a8e6de3ae5727dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  premenuCanvas: {fileID: 0}
+  areUsureCanvas: {fileID: 0}
+  settingsCanvas: {fileID: 0}
+  subIdText1: {fileID: 0}
+  subIdText2: {fileID: 0}
+  subId1: 
+  subId2: 
+  subId1done: 0
+  subId2done: 0
+  captureData: 0
+--- !u!114 &842397237832327733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842397237832327721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d4de14834a1eed45b9f53628b71954c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cogWheelCanvas: {fileID: 0}
+  menuCanvas: {fileID: 0}
+  startButton: {fileID: 0}
+  settingsButton: {fileID: 0}
+  settingsTab: {fileID: 0}
+  calibrationButton: {fileID: 0}
+  validationButton: {fileID: 0}
+  pauseButton: {fileID: 0}
+  resumeButton: {fileID: 0}
+  endExpButton: {fileID: 0}
+  subIdText1: {fileID: 0}
+  subId1: 
+  subId1done: 0
+  enableEyeTracking: 0
+  captureData: 0
+  paused: 0
