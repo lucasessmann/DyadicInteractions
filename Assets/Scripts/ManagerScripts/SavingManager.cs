@@ -86,7 +86,7 @@ public class SavingManager : MonoBehaviour
 		logIndex = 0;
 		// probably we should stop recording only when both responses are given
 		// !(experimentManager.LocalResponseGiven && experimentManager.RemoteResponseGiven)
-		while(!(experimentManager.LocalResponseGiven && experimentManager.RemoteResponseGiven)) {
+		while(!experimentManager.LocalResponseGiven) {
 		
 		// add all variables that we want to log
 		dataLog.index.Add(logIndex);
