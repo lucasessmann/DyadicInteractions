@@ -65,7 +65,9 @@ public class SpawningManager : MonoBehaviour
 
     public void Update()
     {
-        if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
+        //if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
+        //    currentTrial <= numberOfTrials)
+		if (_experimentManager.LocalPlayerReady &&
             currentTrial <= numberOfTrials)
         {
             SpawnStimuli();

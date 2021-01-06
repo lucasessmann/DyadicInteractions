@@ -7,46 +7,38 @@ public class SavingManager : MonoBehaviour
 {
 	// public variables to handle saving
 	public bool logData = true;
-	public float loggingInterval = 0.01f;
+	public float loggingInterval = 0.5f;
+	public string subID = "NOT_ASSIGNED";
 	
 	// paths and json objects to log
 	private string savePath;
 	private string saveDir;
 	private DataLog dataLog;
+	private string stringDataLog;
 	
 	// variables to keep track
-	private int subjID = 0;  // TODO: get this value from the Experiment Manager instead
 	private int currentTrial;
 	private int logIndex;
 
 	
 	// reference variables to get information from
-	private Transform remoteGazeSphere;
-	private Transform localGazeSphere;
-	private Transform spawningManager;
-	private Transform experimentManager;
-	private Transform eyeTrackingManager;
+	private ExperimentManager experimentManager;
+	private SpawningManager spawningManager;
+	private EyeTrackingManager eyeTrackingManager;
 	
 	
 	
     // Start is called before the first frame update
     void Start()
     {
-		// do nothing if we don't log
-        if (!logData)
-        {
-            return;
-        }
 
 		// assign some game object references that we'll need
-		experimentManager = this.transform.parent;
-		spawningManager = experimentManager.Find("SpawningManager");
-		eyeTrackingManager = experimentManager.Find("EyeTrackingManager");
-		remoteGazeSphere = experimentManager.GetComponent<ExperimentManager>().RemoteGazeSphere;
-		localGazeSphere = experimentManager.GetComponent<ExperimentManager>().LocalGazeSphere;
+		experimentManager = this.transform.parent.GetComponent<ExperimentManager>();
+		spawningManager = this.transform.parent.Find("SpawningManager").GetComponent<SpawningManager>();
+		eyeTrackingManager = this.transform.parent.Find("EyeTrackingManager").GetComponent<EyeTrackingManager>();
 		
 		// create a new saving folder for a new session
-		saveDir = Path.Combine(Application.persistentDataPath, "session_" + System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
+		saveDir = Path.Combine(Application.persistentDataPath, "session_" + System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss"));
 		if(!Directory.Exists(saveDir))
 		{
 			//if folder doesn't exist, create it
@@ -54,7 +46,7 @@ public class SavingManager : MonoBehaviour
 		}
 		
 		// set the current trial to the spawning manager's
-		currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
+		currentTrial = spawningManager.currentTrial;
 		
     }
 
@@ -68,10 +60,10 @@ public class SavingManager : MonoBehaviour
         }
 		
 		// start a new logging coroutine each trial
-		if (currentTrial != spawningManager.GetComponent<SpawningManager>().currentTrial) {
+		if (currentTrial != spawningManager.currentTrial) {
 
 			StartCoroutine("loggingRoutine");
-			currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
+			currentTrial = spawningManager.currentTrial;
 		
 		}
 		
@@ -83,45 +75,38 @@ public class SavingManager : MonoBehaviour
 		dataLog = new DataLog();
 		
 		// add stimulus variables at the beginning of the trial
-		dataLog.currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
-		dataLog.stimuliSizes = spawningManager.GetComponent<SpawningManager>().stimuliSizes;
-		dataLog.targetPresent = spawningManager.GetComponent<SpawningManager>().targetPresent;
+		dataLog.subID = subID;
+		dataLog.currentTrial = spawningManager.currentTrial;
+		dataLog.stimuliSizes = spawningManager.stimuliSizes;
+		dataLog.targetPresent = spawningManager.targetPresent;
 		if (dataLog.targetPresent) {
-			dataLog.targetObjectPos = spawningManager.GetComponent<SpawningManager>().targetGO.transform.position;
+			dataLog.targetObjectPos = spawningManager.targetGO.transform.position;
 		}
 		
 		logIndex = 0;
-		while(!(experimentManager.GetComponent<ExperimentManager>().LocalResponseGiven && experimentManager.GetComponent<ExperimentManager>().RemoteResponseGiven)) {
+		// probably we should stop recording only when both responses are given
+		// !(experimentManager.LocalResponseGiven && experimentManager.RemoteResponseGiven)
+		while(!(experimentManager.LocalResponseGiven)) {
 		
-		// add r variables that we want to log
+		// add all variables that we want to log
 		dataLog.index.Add(logIndex);
 		dataLog.sysTime.Add(System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
 		dataLog.runTime.Add(Time.time);
-		dataLog.remoteGazePos.Add(remoteGazeSphere.position);
-		dataLog.localGazePos.Add(localGazeSphere.position);
+		dataLog.remoteGazePos.Add(experimentManager.RemoteGazeSphere.position);
+		dataLog.localGazePos.Add(experimentManager.LocalGazeSphere.position);
 		
 		logIndex ++;
 		yield return new WaitForSeconds(loggingInterval);
 		}
 		
 		// add response variables at the end of trial
-		dataLog.answerPresent = spawningManager.GetComponent<SpawningManager>().answeredPresent;
-		dataLog.lastReactionTime = spawningManager.GetComponent<SpawningManager>().lastReactionTime;
+		dataLog.answerPresent = spawningManager.answeredPresent;
+		dataLog.lastReactionTime = spawningManager.lastReactionTime;
 
-		
-		
 		// save the current data log
-		savePath = Path.Combine(saveDir, "sub" + subjID.ToString() + "_trial" + dataLog.currentTrial.ToString() + ".json");
-		saveJson();
+		savePath = Path.Combine(saveDir, "sub_" + subID + "_trial_" + dataLog.currentTrial.ToString() + ".json");
+		System.IO.File.WriteAllText(savePath, JsonUtility.ToJson(dataLog));
 	}
-	
-	// save dataLog to savePath in a JSON format
-	private void saveJson() {
-		string stringDataLog = JsonUtility.ToJson(dataLog);
-		System.IO.File.WriteAllText(savePath, stringDataLog);
-	}
-	
-	
 }
 
 
@@ -130,6 +115,7 @@ public class DataLog
 {
 	
 	// variables we save once
+	public string subID;
 	public int currentTrial;
 	public bool targetPresent;
 	public int[] stimuliSizes;

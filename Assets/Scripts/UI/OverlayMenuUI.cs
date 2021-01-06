@@ -17,6 +17,7 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject EyeTrackingManager;
 
     private ExperimentManager _experimentManager;
+	private SavingManager _savingManager;
     public GameObject uiCanvas;
     public GameObject menuOverlay;
     public GameObject startButton;
@@ -68,6 +69,7 @@ public class OverlayMenuUI : MonoBehaviour
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
         _experimentManager = GetComponentInParent<ExperimentManager>();
+		_savingManager = this.transform.parent.Find("SavingManager").GetComponent<SavingManager>();
         
         // playerSteam = GameObject.Find("PlayerSTEAM");
         VRcamera = GameObject.Find("VRCamera");
@@ -301,10 +303,12 @@ public class OverlayMenuUI : MonoBehaviour
     public void DataCaptureEnable()
     {
         captureData = true;
+		_savingManager.logData = true;
     }
     public void DataCaptureDisable()
     {
         captureData = false;
+		_savingManager.logData = false;
     }
 
     public void EyeTrackingEnable()
@@ -323,6 +327,7 @@ public class OverlayMenuUI : MonoBehaviour
         subId1 = subIdText1.text;
         if (!Input.GetKeyDown(KeyCode.Return) || subId1done !=false) return;
         subId1done = true;
+		_savingManager.subID = subId1;
     }
 
     #endregion
