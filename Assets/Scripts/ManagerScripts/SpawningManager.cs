@@ -10,7 +10,7 @@ public class SpawningManager : MonoBehaviour
     public GameObject spawnPointsGameObject;
     public GameObject distractorPrefab;
     public GameObject targetPrefab;
-    private GameObject _targetGO;
+    public GameObject targetGO;
     public float stimulusPresenceRate = 0.5f;
 
     private ExperimentManager _experimentManager;
@@ -23,7 +23,7 @@ public class SpawningManager : MonoBehaviour
     public bool targetPresent;
     public bool answeredPresent;
     
-    private int[] _stimuliSizes = {21, 35};
+    public int[] stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
 
@@ -32,7 +32,7 @@ public class SpawningManager : MonoBehaviour
     public int randomSeed = 7;
 
     public float stimuliOnsetTime;
-    private float _lastReactionTime;
+    public float lastReactionTime;
     // TODO: SAVE ANSWER IN VARIABLE
     
     private GameObject[] _stimuliGOs;
@@ -123,13 +123,13 @@ public class SpawningManager : MonoBehaviour
 
     private void HandleResponse(bool answer)
     {
-        _lastReactionTime = Time.time - stimuliOnsetTime;
+        lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
 
         // TODO: CHANGE / REMOVE THIS
         Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
-        Debug.Log("RT was " + _lastReactionTime + " seconds");
+        Debug.Log("RT was " + lastReactionTime + " seconds");
 
         //GiveTargetFeedback();
     }
@@ -154,7 +154,7 @@ public class SpawningManager : MonoBehaviour
 
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
-        _stimuliSize = _stimuliSizes[_rnd.Next(_stimuliSizes.Length)];
+        _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
         _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21)  : _spawnPointsList;
      
 
@@ -169,7 +169,7 @@ public class SpawningManager : MonoBehaviour
             var distractorSpawnPoints = RemoveTargetIndexFromList(_chosenSpawnPoints, _targetIndex);
 
             // Spawn Target Prefab
-            _targetGO = Instantiate(targetPrefab, _chosenSpawnPoints[_targetIndex]);
+            targetGO = Instantiate(targetPrefab, _chosenSpawnPoints[_targetIndex]);
 
             // Spawn Distractor Objects with randomly preselected orientation
             foreach (var spawnPoint in distractorSpawnPoints)
@@ -212,7 +212,7 @@ public class SpawningManager : MonoBehaviour
         // TODO: Extend Feedback
         if (targetPresent)
         {
-            _targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
+            targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
         
         

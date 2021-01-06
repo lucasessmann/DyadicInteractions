@@ -5,76 +5,117 @@ using UnityEngine;
 
 public class SavingManager : MonoBehaviour
 {
-	// path/file variables
+	// public variables to handle saving
 	public bool logData = true;
 	public float loggingInterval = 0.01f;
-	public float time = 0f;
 	
-	
+	// paths and json objects to log
 	private string savePath;
+	private string saveDir;
 	private DataLog dataLog;
 	
-	// variables to write
-	private int logIndex = 0;
-	private int trialNo = 1;  // TODO: get this value from the Experiment Manager instead
+	// variables to keep track
 	private int subjID = 0;  // TODO: get this value from the Experiment Manager instead
-	private System.DateTime sysTime;
+	private int currentTrial;
+	private int logIndex;
+
+	
+	// reference variables to get information from
+	private Transform remoteGazeSphere;
+	private Transform localGazeSphere;
+	private Transform spawningManager;
+	private Transform experimentManager;
+	private Transform eyeTrackingManager;
+	
 	
 	
     // Start is called before the first frame update
     void Start()
     {
-		sysTime = System.DateTime.Now;
-        savePath = Application.persistentDataPath + "/sub" + subjID.ToString() + "_trial" + trialNo.ToString() + ".json";
-		
-		// start saving the data
-		if (logData) {
-			dataLog = new DataLog();
-			StartCoroutine("appendLog");
-		}
+		// do nothing if we don't log
+        if (!logData)
+        {
+            return;
+        }
 
+		// assign some game object references that we'll need
+		experimentManager = this.transform.parent;
+		spawningManager = experimentManager.Find("SpawningManager");
+		eyeTrackingManager = experimentManager.Find("EyeTrackingManager");
+		remoteGazeSphere = experimentManager.GetComponent<ExperimentManager>().RemoteGazeSphere;
+		localGazeSphere = experimentManager.GetComponent<ExperimentManager>().LocalGazeSphere;
+		
+		// create a new saving folder for a new session
+		saveDir = Path.Combine(Application.persistentDataPath, "session_" + System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
+		if(!Directory.Exists(saveDir))
+		{
+			//if folder doesn't exist, create it
+			Directory.CreateDirectory(saveDir);	
+		}
+		
+		// set the current trial to the spawning manager's
+		currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
+		
     }
 
     // Update is called once per frame
     void Update()
     {
-		time += Time.deltaTime;
-		// replace the following statement with if trial = start
-		if (time >= 30f && logData) {
-			time = 0f;
-			logIndex = 0;
-			trialNo ++;
-			
-			// save the datalog and create a new empty log
-			saveJson();
-			dataLog = new DataLog();
-			savePath = Application.persistentDataPath + "/sub" + subjID.ToString() + "_trial" + trialNo.ToString() + ".json";
+		// do nothing if we don't log
+        if (!logData)
+        {
+            return;
+        }
+		
+		// start a new logging coroutine each trial
+		if (currentTrial != spawningManager.GetComponent<SpawningManager>().currentTrial) {
+
+			StartCoroutine("loggingRoutine");
+			currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
 		
 		}
 		
 	}
 		
-	private IEnumerator appendLog() {
+	private IEnumerator loggingRoutine() {
 		
-		// TODO: change this while loop to return False when the game loop is over
-		while(1==1) {
-		//TODO: We use the current system datetime here
-		// It would be better to (additionally) derive this time
-		//from a game loop in the experimental manager
-		sysTime = System.DateTime.Now;
+		// create a new empty log for the next trial
+		dataLog = new DataLog();
 		
-		// add all the variables that we want to log
+		// add stimulus variables at the beginning of the trial
+		dataLog.currentTrial = spawningManager.GetComponent<SpawningManager>().currentTrial;
+		dataLog.stimuliSizes = spawningManager.GetComponent<SpawningManager>().stimuliSizes;
+		dataLog.targetPresent = spawningManager.GetComponent<SpawningManager>().targetPresent;
+		if (dataLog.targetPresent) {
+			dataLog.targetObjectPos = spawningManager.GetComponent<SpawningManager>().targetGO.transform.position;
+		}
+		
+		logIndex = 0;
+		while(!(experimentManager.GetComponent<ExperimentManager>().LocalResponseGiven && experimentManager.GetComponent<ExperimentManager>().RemoteResponseGiven)) {
+		
+		// add r variables that we want to log
 		dataLog.index.Add(logIndex);
-		dataLog.sysTime.Add(sysTime.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
+		dataLog.sysTime.Add(System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
 		dataLog.runTime.Add(Time.time);
-		dataLog.remoteGazePos.Add(this.transform.parent.GetComponent<ExperimentManager>().RemoteGazeSphere.position);
-		dataLog.localGazePos.Add(this.transform.parent.GetComponent<ExperimentManager>().LocalGazeSphere.position);
+		dataLog.remoteGazePos.Add(remoteGazeSphere.position);
+		dataLog.localGazePos.Add(localGazeSphere.position);
 		
 		logIndex ++;
 		yield return new WaitForSeconds(loggingInterval);
 		}
+		
+		// add response variables at the end of trial
+		dataLog.answerPresent = spawningManager.GetComponent<SpawningManager>().answeredPresent;
+		dataLog.lastReactionTime = spawningManager.GetComponent<SpawningManager>().lastReactionTime;
+
+		
+		
+		// save the current data log
+		savePath = Path.Combine(saveDir, "sub" + subjID.ToString() + "_trial" + dataLog.currentTrial.ToString() + ".json");
+		saveJson();
 	}
 	
+	// save dataLog to savePath in a JSON format
 	private void saveJson() {
 		string stringDataLog = JsonUtility.ToJson(dataLog);
 		System.IO.File.WriteAllText(savePath, stringDataLog);
@@ -85,13 +126,22 @@ public class SavingManager : MonoBehaviour
 
 
 [System.Serializable]
-public class DataLog {
-	// introduce all variables that we want to log
-    public int trialNo;
+public class DataLog
+{
+	
+	// variables we save once
+	public int currentTrial;
+	public bool targetPresent;
+	public int[] stimuliSizes;
+	public Vector3 targetObjectPos;
+	public bool answerPresent;
+	public float lastReactionTime;
+	
+	// variables we log continuously
     public List<int> index = new List<int>();
-	public List<string> sysTime = new List<string>();
-	public List<float> runTime = new List<float>();
 	public List<Vector3> remoteGazePos = new List<Vector3>();
 	public List<Vector3> localGazePos = new List<Vector3>();
-	
-	}
+	public List<float> runTime = new List<float>();
+	public List<string> sysTime = new List<string>();
+
+}
