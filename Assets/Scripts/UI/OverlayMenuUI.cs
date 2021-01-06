@@ -325,9 +325,9 @@ public class OverlayMenuUI : MonoBehaviour
     public void SubId1()
     {
         subId1 = subIdText1.text;
+		_savingManager.subID = subId1;
         if (!Input.GetKeyDown(KeyCode.Return) || subId1done !=false) return;
         subId1done = true;
-		_savingManager.subID = subId1;
     }
 
     #endregion

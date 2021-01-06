@@ -6,7 +6,7 @@ using UnityEngine;
 public class SavingManager : MonoBehaviour
 {
 	// public variables to handle saving
-	public bool logData = true;
+	public bool logData = false;
 	public float loggingInterval = 0.5f;
 	public string subID = "NOT_ASSIGNED";
 	
