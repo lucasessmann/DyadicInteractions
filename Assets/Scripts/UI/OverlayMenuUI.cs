@@ -788,6 +788,7 @@ public class OverlayMenuUI : MonoBehaviour
     public void SureYes()
     {
         // Stop Experiment
+        Application.Quit();
     }
     public void SureNo()
     {
