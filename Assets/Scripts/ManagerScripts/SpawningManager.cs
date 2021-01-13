@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Valve.VR;
 using Random = System.Random;
 
@@ -11,6 +12,7 @@ public class SpawningManager : MonoBehaviour
     public GameObject distractorPrefab;
     public GameObject targetPrefab;
     public GameObject targetGO;
+    public GameObject feedbackText;
     public float stimulusPresenceRate = 0.5f;
 
     private ExperimentManager _experimentManager;
@@ -22,7 +24,7 @@ public class SpawningManager : MonoBehaviour
     private bool _stimuliInScene = false;
     public bool targetPresent;
     public bool answeredPresent;
-    
+
     public int[] stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
@@ -32,12 +34,15 @@ public class SpawningManager : MonoBehaviour
     public int randomSeed = 7;
 
     public float stimuliOnsetTime;
+
     public float lastReactionTime;
+
+    public string feedback;
     // TODO: SAVE ANSWER IN VARIABLE
-    
+
     private GameObject[] _stimuliGOs;
     private Random _rnd;
-    
+
 
     // Controllers
     public OverlayMenuUI overlayScript;
@@ -50,6 +55,9 @@ public class SpawningManager : MonoBehaviour
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
         _rnd = new Random(randomSeed);
+
+        // Setting the feedback text to empty
+        feedbackText.GetComponent<TextMesh>().text = ""; 
 
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 180));
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 0));
@@ -69,6 +77,8 @@ public class SpawningManager : MonoBehaviour
             currentTrial <= numberOfTrials)
         {
             SpawnStimuli();
+            // Setting the feedback text to empty
+            feedbackText.GetComponent<TextMesh>().text = ""; 
         }
 
         if (CheckAlreadyAnswered())
@@ -127,6 +137,9 @@ public class SpawningManager : MonoBehaviour
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
 
+        // Text Feedback
+        feedbackText.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
+        
         // TODO: CHANGE / REMOVE THIS
         Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + lastReactionTime + " seconds");
@@ -136,10 +149,10 @@ public class SpawningManager : MonoBehaviour
 
     private void SpawnStimuli()
     {
-        
+
         // Increment current Trial
         currentTrial++;
-        
+
         // Reset Answers
         _experimentManager.LocalPlayerReady = false;
 
@@ -155,8 +168,8 @@ public class SpawningManager : MonoBehaviour
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
         _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
-        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21)  : _spawnPointsList;
-     
+        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+
 
 
 
@@ -214,9 +227,9 @@ public class SpawningManager : MonoBehaviour
         {
             targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
-        
-        
 
-        
+
+
+
     }
 }
