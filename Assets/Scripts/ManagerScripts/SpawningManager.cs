@@ -51,7 +51,7 @@ public class SpawningManager : MonoBehaviour
     public SteamVR_Action_Boolean grabGrip;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
-
+    
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
