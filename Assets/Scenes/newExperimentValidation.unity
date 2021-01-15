@@ -1251,10 +1251,12 @@ MonoBehaviour:
   startExperimentPress: 0
   useHDMI: 0
   withEyeTracking: 0
+  randomSeedSet: 0
+  randomSeed: 0
   WarmUpTime: 3
   InterpolationFactor: 5
   NetMan: {fileID: 309331644}
-  CountdownDiplay: {fileID: 0}
+  CountdownDiplay: {fileID: 606169744}
   playerSteam: {fileID: 700659165}
 --- !u!1 &199658564
 GameObject:
@@ -2012,8 +2014,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You will work together with a partner.
 
-    But you will not be able
-    to talk to each other during the task.'
+    But you will not be able to
+    talk to each other during the task.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12298,10 +12300,10 @@ MonoBehaviour:
   stimulusPresenceRate: 0.5
   targetPresent: 0
   answeredPresent: 0
+  trialAnswer: 0
   stimuliSizes: 1500000023000000
   numberOfTrials: 5
   currentTrial: 0
-  randomSeed: 7
   stimuliOnsetTime: 0
   lastReactionTime: 0
   feedback: 
