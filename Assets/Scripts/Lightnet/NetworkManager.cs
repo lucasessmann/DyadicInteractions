@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -15,6 +16,8 @@ public class NetworkManager : MonoBehaviour
 
     private UserState SendingUserState = new UserState();
     private RandomState SendingRandomState = new RandomState();
+    private ResponseState SendingResponseState = new ResponseState();
+    
     
 
 
@@ -55,12 +58,12 @@ public class NetworkManager : MonoBehaviour
     }
 
     //public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent, bool playerReady)
-    public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool playerReady)
+    public void BroadcastExperimentState(Transform gazeSphereTransform,  bool playerReady) //, bool responseGiven,bool trialAnswer)
     {
         SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
-        SendingUserState.responseGiven = responseGiven;
-        //SendingUserState.respondedTargetPresent = respondedTargetPresent;
+        //SendingUserState.responseGiven = responseGiven;
         SendingUserState.playerReady = playerReady;
+        //SendingUserState.trialAnswer = trialAnswer;
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
     }
 
@@ -68,6 +71,13 @@ public class NetworkManager : MonoBehaviour
     {
         SendingRandomState.randomSeed = randomSeed;
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingRandomState);
+    }
+
+    public void BroadCastResponseState(bool responseGiven, bool trialAnswer)
+    {
+        SendingResponseState.responseGiven = responseGiven;
+        SendingResponseState.trialAnswer = trialAnswer;
+        NetComp.BroadcastNetworkData(ENetChannel.Reliable, SendingResponseState);
     }
 
     // Start is called before the first frame update
@@ -125,6 +135,11 @@ public class NetworkManager : MonoBehaviour
             case ENetDataType.RandomState:
                 ExperimentManager.Instance().ReceivedRandomStateUpdate((RandomState)data);
                 break;
+            case ENetDataType.ResponseState:
+                ExperimentManager.Instance().ReceivedResponseStateUpdate((ResponseState)data);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
     

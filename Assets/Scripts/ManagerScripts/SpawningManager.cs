@@ -25,7 +25,8 @@ public class SpawningManager : MonoBehaviour
     private bool _stimuliInScene = false;
     public bool targetPresent;
     public bool answeredPresent;
-
+    public bool trialAnswer;
+    
     public int[] stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
@@ -85,13 +86,15 @@ public class SpawningManager : MonoBehaviour
         if (CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
+            _experimentManager.LocalResponseGiven = false;
+            _experimentManager.RemoteResponseGiven = false;
         }
 
         if (overlayScript.hmdUsed)
         {
             if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
             {
-                _experimentManager.LocalResponseGiven = false;
+                //_experimentManager.LocalResponseGiven = false;
 
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
@@ -120,7 +123,7 @@ public class SpawningManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _experimentManager.LocalResponseGiven = false;
+                // _experimentManager.LocalResponseGiven = false;
 
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
@@ -142,22 +145,15 @@ public class SpawningManager : MonoBehaviour
         lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
+        trialAnswer = answer;
+        _experimentManager.NetMan.BroadCastResponseState(_experimentManager.LocalResponseGiven, trialAnswer);	
 
-        // Text Feedback
-        if (overlayScript.hmdUsed)
-        {
-            feedbackText.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
-        }
-        else
-        {
-            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
-        }
+        
 
         // TODO: CHANGE / REMOVE THIS
-        Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
+        //Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + lastReactionTime + " seconds");
 
-        //GiveTargetFeedback();
     }
 
     private void SpawnStimuli()
@@ -239,15 +235,23 @@ public class SpawningManager : MonoBehaviour
 
     private void GiveTargetFeedback()
     {
-
-        // TODO: Extend Feedback
+        // Text Feedback
+        if (overlayScript.hmdUsed)
+        {
+            feedbackText.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        else
+        {
+            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        
+        //Debug.Log(targetPresent == trialAnswer ? "Correct!" : "Incorrect!");
+        
+        // Highlight Target Object if Present
         if (targetPresent)
         {
             targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
-
-
-
-
     }
+
 }

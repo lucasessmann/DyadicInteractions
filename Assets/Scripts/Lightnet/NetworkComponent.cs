@@ -231,6 +231,9 @@ public class NetworkComponent : MonoBehaviour
                     case ENetDataType.RandomState:
                         networkData = new RandomState();
                         break;
+                    case ENetDataType.ResponseState:
+                        networkData = new ResponseState	();
+                        break;
                     default:
                         Debug.LogError("Unknown NetDataType " + (int)type);
                         break;

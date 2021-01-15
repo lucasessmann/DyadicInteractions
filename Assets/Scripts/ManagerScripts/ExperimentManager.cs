@@ -13,13 +13,9 @@ public class ExperimentManager : MonoBehaviour
     public Transform startPositionExperiment;
     
     public bool LocalResponseGiven;
-    //public bool LocalRespondedTargetPresent;
-    
     public bool RemoteResponseGiven;
-    //public bool RemoteRespondedTargetPresent;
 
     public bool LocalPlayerReady;
-    
     public bool RemotePlayerReady;
     
     public bool startExperimentPress= false;
@@ -67,18 +63,22 @@ public class ExperimentManager : MonoBehaviour
     {
 
         RemoteGazeSphere.position = Vector3.Lerp(RemoteGazeSphere.position,incomingState.GazeSpherePosition,Time.deltaTime * InterpolationFactor);
-
-        RemoteResponseGiven = incomingState.responseGiven;
-        //RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
+        //RemoteResponseGiven = incomingState.responseGiven;
+        //_spawnManager.trialAnswer = incomingState.trialAnswer;
         RemotePlayerReady = incomingState.playerReady;
+        
     }
 
     public void ReceivedRandomStateUpdate(RandomState incomingState)
     {
         randomSeed =  (int) incomingState.randomSeed;
         _spawnManager.SetRandomObject(incomingState.randomSeed);
-        
-        
+    }
+    
+    public void ReceivedResponseStateUpdate(ResponseState incomingState)
+    {
+        RemoteResponseGiven = incomingState.responseGiven;
+        _spawnManager.trialAnswer = incomingState.trialAnswer;
     }
 
     public void SetExperimentStatus(EExperimentStatus status)
@@ -222,8 +222,7 @@ public class ExperimentManager : MonoBehaviour
         
         if (NetMan.GetState() == ENetworkState.Running)
         {
-            //NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent, LocalPlayerReady);
-            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalPlayerReady);
+            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalPlayerReady);
         }
 
         if (Status == EExperimentStatus.WarmUp)
