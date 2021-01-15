@@ -45,7 +45,10 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject textSv;
     public GameObject textSgv;
     public GameObject textSg;
-    public GameObject textNc; 
+    public GameObject textNc;
+    public GameObject generalInfoText;
+    public GameObject vrText;
+    public GameObject fallbackText;
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
@@ -78,6 +81,9 @@ public class OverlayMenuUI : MonoBehaviour
         menuOverlay.SetActive(false);
         subjectCanvasHmd.SetActive(false);
         textBackground.SetActive(false);
+        generalInfoText.SetActive(false);
+        fallbackText.SetActive(false);
+        vrText.SetActive(false);
         text1P.SetActive(false);
         textSv.SetActive(false);
         textSgv.SetActive(false);
@@ -427,6 +433,9 @@ public class OverlayMenuUI : MonoBehaviour
                 condition1PPressed = false;
                 
                 textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
                 text1P.SetActive(false);
             }
             else
@@ -451,6 +460,15 @@ public class OverlayMenuUI : MonoBehaviour
                 condition1PPressed = true;
                 
                 textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
                 text1P.SetActive(true);
             }
             // Select condition
@@ -479,6 +497,9 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSVPressed = false;
                 
                 textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
                 textSv.SetActive(false);
             }
             else
@@ -503,6 +524,15 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSVPressed = true;
                 
                 textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
                 textSv.SetActive(true);
             }
             // Select condition
@@ -531,6 +561,9 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSGVPressed = false;
                 
                 textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
                 textSgv.SetActive(false);
             }
             else
@@ -555,6 +588,15 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSGVPressed = true;
                 
                 textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
                 textSgv.SetActive(true);
             }
             // Select condition
@@ -583,6 +625,9 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSGPressed = false;
                 
                 textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
                 textSg.SetActive(false);
             }
             else
@@ -607,6 +652,15 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionSGPressed = true;
                 
                 textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
                 textSg.SetActive(true);
             }
             // Select condition
@@ -635,6 +689,9 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionNCPressed = false;
                 
                 textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
                 textNc.SetActive(false);
             }
             else
@@ -659,6 +716,15 @@ public class OverlayMenuUI : MonoBehaviour
                 conditionNCPressed = true;
                 
                 textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
                 textNc.SetActive(true);
             }
             // Select condition
