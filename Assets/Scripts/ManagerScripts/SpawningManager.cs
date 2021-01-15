@@ -29,7 +29,6 @@ public class SpawningManager : MonoBehaviour
 
     public int numberOfTrials = 5; // Originally 192
     public int currentTrial = 0;
-    public int randomSeed = 7;
 
     public float stimuliOnsetTime;
     public float lastReactionTime;
@@ -49,7 +48,7 @@ public class SpawningManager : MonoBehaviour
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
-        _rnd = new Random(randomSeed);
+        
 
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 180));
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 0));
@@ -116,6 +115,11 @@ public class SpawningManager : MonoBehaviour
         }
     }
 
+    public void SetRandomObject(float randomSeed)
+    {
+        _rnd = new Random((int) randomSeed);
+    }
+
     private bool CheckAlreadyAnswered()
     {
         return _experimentManager.LocalResponseGiven | _experimentManager.RemoteResponseGiven;
@@ -151,9 +155,11 @@ public class SpawningManager : MonoBehaviour
                 Destroy(stimulus);
             }
         }
-
+        
+        // Target-Present or Target-Absent Trial
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
+        // Stimuli-Size
         _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
         _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21)  : _spawnPointsList;
      
@@ -181,6 +187,7 @@ public class SpawningManager : MonoBehaviour
         }
         else
         {
+            // only spawn distractor objects
             foreach (var spawnPoint in _chosenSpawnPoints)
             {
                 var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
@@ -192,6 +199,8 @@ public class SpawningManager : MonoBehaviour
         // Save GOs in list for later deletion.
         _stimuliGOs = GameObject.FindGameObjectsWithTag("stimulus");
         _stimuliInScene = true;
+        
+        // Set stimuli onset time
         stimuliOnsetTime = Time.time;
     }
 
