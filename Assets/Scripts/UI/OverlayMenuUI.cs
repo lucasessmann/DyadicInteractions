@@ -40,6 +40,12 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject exitTab;
     public GameObject readyButton;
     public GameObject readyButtonFallback;
+    public GameObject textBackground;
+    public GameObject text1P;
+    public GameObject textSv;
+    public GameObject textSgv;
+    public GameObject textSg;
+    public GameObject textNc; 
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
@@ -72,6 +78,13 @@ public class OverlayMenuUI : MonoBehaviour
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
         subjectCanvasHmd.SetActive(false);
+        textBackground.SetActive(false);
+        text1P.SetActive(false);
+        textSv.SetActive(false);
+        textSgv.SetActive(false);
+        textSg.SetActive(false);
+        textNc.SetActive(false);
+        
         _experimentManager = GetComponentInParent<ExperimentManager>();
 		_savingManager = this.transform.parent.Find("SavingManager").GetComponent<SavingManager>();
         
@@ -413,6 +426,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 condition1PPressed = false;
+                
+                textBackground.SetActive(false);
+                text1P.SetActive(false);
             }
             else
             {
@@ -434,6 +450,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 condition1PPressed = true;
+                
+                textBackground.SetActive(true);
+                text1P.SetActive(true);
             }
             // Select condition
         }
@@ -459,6 +478,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSVPressed = false;
+                
+                textBackground.SetActive(false);
+                textSv.SetActive(false);
             }
             else
             {
@@ -480,6 +502,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSVPressed = true;
+                
+                textBackground.SetActive(true);
+                textSv.SetActive(true);
             }
             // Select condition
         }
@@ -505,6 +530,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGVPressed = false;
+                
+                textBackground.SetActive(false);
+                textSgv.SetActive(false);
             }
             else
             {
@@ -526,6 +554,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGVPressed = true;
+                
+                textBackground.SetActive(true);
+                textSgv.SetActive(true);
             }
             // Select condition
         }
@@ -551,6 +582,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGPressed = false;
+                
+                textBackground.SetActive(false);
+                textSg.SetActive(false);
             }
             else
             {
@@ -572,6 +606,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGPressed = true;
+                
+                textBackground.SetActive(true);
+                textSg.SetActive(true);
             }
             // Select condition
         }
@@ -597,6 +634,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonSG.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionNCPressed = false;
+                
+                textBackground.SetActive(false);
+                textNc.SetActive(false);
             }
             else
             {
@@ -618,6 +658,9 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonSG.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionNCPressed = true;
+                
+                textBackground.SetActive(true);
+                textNc.SetActive(true);
             }
             // Select condition
         }
