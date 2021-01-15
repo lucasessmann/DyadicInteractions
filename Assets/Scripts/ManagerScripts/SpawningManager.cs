@@ -13,6 +13,7 @@ public class SpawningManager : MonoBehaviour
     public GameObject targetPrefab;
     public GameObject targetGO;
     public GameObject feedbackText;
+    public GameObject feedbackTextFallback;
     public float stimulusPresenceRate = 0.5f;
 
     private ExperimentManager _experimentManager;
@@ -79,6 +80,7 @@ public class SpawningManager : MonoBehaviour
             SpawnStimuli();
             // Setting the feedback text to empty
             feedbackText.GetComponent<TextMesh>().text = ""; 
+            feedbackTextFallback.GetComponent<TextMesh>().text = ""; 
         }
 
         if (CheckAlreadyAnswered())
@@ -138,8 +140,15 @@ public class SpawningManager : MonoBehaviour
         answeredPresent = answer;
 
         // Text Feedback
-        feedbackText.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
-        
+        if (overlayScript.hmdUsed)
+        {
+            feedbackText.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
+        }
+        else
+        {
+            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
+        }
+
         // TODO: CHANGE / REMOVE THIS
         Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + lastReactionTime + " seconds");
