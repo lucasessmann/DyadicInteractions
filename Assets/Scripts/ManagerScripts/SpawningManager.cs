@@ -22,24 +22,21 @@ public class SpawningManager : MonoBehaviour
     private List<Transform> _chosenSpawnPoints;
     private List<Quaternion> _distractorDirections = new List<Quaternion>();
 
-    private bool _stimuliInScene = false;
+    private bool _stimuliInScene;
     public bool targetPresent;
     public bool answeredPresent;
     public bool trialAnswer;
+    public bool inExperimentRoom;
     
     public int[] stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
 
     public int numberOfTrials = 5; // Originally 192
-    public int currentTrial = 0;
+    public int currentTrial;
 
     public float stimuliOnsetTime;
-
     public float lastReactionTime;
-
-    public string feedback;
-    // TODO: SAVE ANSWER IN VARIABLE
 
     private GameObject[] _stimuliGOs;
     private Random _rnd;
@@ -51,7 +48,7 @@ public class SpawningManager : MonoBehaviour
     public SteamVR_Action_Boolean grabGrip;
     public SteamVR_Input_Sources leftInput = SteamVR_Input_Sources.LeftHand;
     public SteamVR_Input_Sources rightInput = SteamVR_Input_Sources.RightHand;
-    
+
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
@@ -92,10 +89,8 @@ public class SpawningManager : MonoBehaviour
 
         if (overlayScript.hmdUsed)
         {
-            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any) & inExperimentRoom	)
             {
-                //_experimentManager.LocalResponseGiven = false;
-
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
 
@@ -121,10 +116,8 @@ public class SpawningManager : MonoBehaviour
                 HandleResponse(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) & inExperimentRoom)
             {
-                // _experimentManager.LocalResponseGiven = false;
-
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
         }
@@ -146,19 +139,12 @@ public class SpawningManager : MonoBehaviour
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
         trialAnswer = answer;
-        _experimentManager.NetMan.BroadCastResponseState(_experimentManager.LocalResponseGiven, trialAnswer);	
-
-        
-
-        // TODO: CHANGE / REMOVE THIS
-        //Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
-        Debug.Log("RT was " + lastReactionTime + " seconds");
-
+        _experimentManager.NetMan.BroadCastResponseState(_experimentManager.LocalResponseGiven, trialAnswer);
+        //Debug.Log("RT was " + lastReactionTime + " seconds");
     }
 
     private void SpawnStimuli()
     {
-
         // Increment current Trial
         currentTrial++;
 
@@ -180,10 +166,7 @@ public class SpawningManager : MonoBehaviour
         // Stimuli-Size
         _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
         _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
-
-
-
-
+        
         if (targetPresent)
         {
             // Randomly select the target position among the spawn points and 
@@ -244,8 +227,6 @@ public class SpawningManager : MonoBehaviour
         {
             feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
         }
-        
-        //Debug.Log(targetPresent == trialAnswer ? "Correct!" : "Incorrect!");
         
         // Highlight Target Object if Present
         if (targetPresent)

@@ -202,6 +202,7 @@ public class ExperimentManager : MonoBehaviour
         {
             playerPosition.position = startPositionExperiment.position;
             playerPosition.localEulerAngles = new Vector3(0, 0, 0);
+            _spawnManager.inExperimentRoom = true;
             // player is set to ready state
             // startExperiment = false;
             // LocalPlayerReady = true;
