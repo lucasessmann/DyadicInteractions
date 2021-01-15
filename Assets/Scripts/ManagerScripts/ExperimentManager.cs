@@ -2,30 +2,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
+
 public class ExperimentManager : MonoBehaviour
 {
-    //
-
-    public Transform LocalGazeSphere;
     
+    public Transform LocalGazeSphere;
     public Transform RemoteGazeSphere;
     public Transform playerPosition;
     public Transform startPositionExperiment;
     
-    // TODO: Try remote and local bool variables
     public bool LocalResponseGiven;
-    //public bool LocalRespondedTargetPresent;
-    
     public bool RemoteResponseGiven;
-    //public bool RemoteRespondedTargetPresent;
 
     public bool LocalPlayerReady;
-    
     public bool RemotePlayerReady;
     
     public bool startExperimentPress= false;
     public bool useHDMI;
     public bool withEyeTracking = false;
+    
+    public bool randomSeedSet = false;
+    public int randomSeed;
+
+    private SpawningManager _spawnManager;
     
     
     
@@ -62,22 +62,23 @@ public class ExperimentManager : MonoBehaviour
     public void ReceivedUserStateUpdate(UserState incomingState)
     {
 
-        RemoteGazeSphere.position = Vector3.Lerp(RemoteGazeSphere.position,         incomingState.GazeSpherePosition,      Time.deltaTime * InterpolationFactor);
-
-        RemoteResponseGiven = incomingState.responseGiven;
-        //RemoteRespondedTargetPresent = incomingState.respondedTargetPresent;
+        RemoteGazeSphere.position = Vector3.Lerp(RemoteGazeSphere.position,incomingState.GazeSpherePosition,Time.deltaTime * InterpolationFactor);
+        //RemoteResponseGiven = incomingState.responseGiven;
+        //_spawnManager.trialAnswer = incomingState.trialAnswer;
         RemotePlayerReady = incomingState.playerReady;
+        
+    }
 
-        //EyetrackingRemote
-
-        //Debug.Log(incomingState.TargetPosition);
-
-        /* 
-        if (NetMan.IsServer()==false)
-        { 
-            dronePositionController.SetPositionAsPercentage(incomingState.TargetPosition);
-        }*/
-
+    public void ReceivedRandomStateUpdate(RandomState incomingState)
+    {
+        randomSeed =  (int) incomingState.randomSeed;
+        _spawnManager.SetRandomObject(incomingState.randomSeed);
+    }
+    
+    public void ReceivedResponseStateUpdate(ResponseState incomingState)
+    {
+        RemoteResponseGiven = incomingState.responseGiven;
+        _spawnManager.trialAnswer = incomingState.trialAnswer;
     }
 
     public void SetExperimentStatus(EExperimentStatus status)
@@ -183,7 +184,6 @@ public class ExperimentManager : MonoBehaviour
     
     private void Start()
     {
-
         Debug.Assert(NetMan != null, "Sample Network Manager is not set");
         
         Debug.Assert(RemoteGazeSphere != null, "Remote GazeSphere is not set");
@@ -192,6 +192,8 @@ public class ExperimentManager : MonoBehaviour
         Debug.Assert(CountdownDiplay != null, "Countdown text mesh is not set!");
         
         Status = EExperimentStatus.Waiting;
+
+        _spawnManager = GetComponentInChildren<SpawningManager>();
     }
 
     private void Update()
@@ -203,13 +205,24 @@ public class ExperimentManager : MonoBehaviour
             // player is set to ready state
             // startExperiment = false;
             // LocalPlayerReady = true;
+
+            
+            if (NetMan.IsServer() && !randomSeedSet)
+            {
+                Random rnd = new Random();
+                randomSeed = rnd.Next(0, 10000000);
+                _spawnManager.SetRandomObject((float) randomSeed);
+                NetMan.BroadCastRandomState((float) randomSeed);
+                randomSeedSet = true;
+
+            }
+
+            startExperimentPress = false;
         }
         
         if (NetMan.GetState() == ENetworkState.Running)
         {
-            //NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalRespondedTargetPresent, LocalPlayerReady);
-            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalResponseGiven, LocalPlayerReady);
-         //   NetMan.BroadcastVRAvatarUpdate(LocalHead, LocalHandLeft, LocalHandRight);
+            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalPlayerReady);
         }
 
         if (Status == EExperimentStatus.WarmUp)

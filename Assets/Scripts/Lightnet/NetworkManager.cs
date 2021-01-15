@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -14,6 +15,10 @@ public class NetworkManager : MonoBehaviour
     public NetworkComponent NetComp;
 
     private UserState SendingUserState = new UserState();
+    private RandomState SendingRandomState = new RandomState();
+    private ResponseState SendingResponseState = new ResponseState();
+    
+    
 
 
     public bool StartServer()
@@ -52,42 +57,27 @@ public class NetworkManager : MonoBehaviour
         NetComp.BroadcastNetworkData(ENetChannel.Reliable, new ExperimentState { Status = status });
     }
 
-    public void BroadcastVRAvatarUpdate(Transform VRHead, Transform VRHandLeft, Transform VRHandRight)
+    //public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent, bool playerReady)
+    public void BroadcastExperimentState(Transform gazeSphereTransform,  bool playerReady) //, bool responseGiven,bool trialAnswer)
     {
-        //Debug.Log("Broadcasting VR avatar update");
-        /*SendingUserState.HeadPosition      = VRHead.position;
-        SendingUserState.HeadRotation      = VRHead.rotation;
-        SendingUserState.HandLeftPosition  = VRHandLeft.position;
-        SendingUserState.HandLeftRotation  = VRHandLeft.rotation;
-        SendingUserState.HandRightPosition = VRHandRight.position;
-        SendingUserState.HandRightRotation = VRHandRight.rotation;*/
+        SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
+        //SendingUserState.responseGiven = responseGiven;
+        SendingUserState.playerReady = playerReady;
+        //SendingUserState.trialAnswer = trialAnswer;
         NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
     }
-    //public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent, bool playerReady)
-    public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool playerReady)
+
+    public void BroadCastRandomState(float randomSeed)
     {
-        
-        /*
-        SendingUserState.TargetPosition = TargetPosition;
+        SendingRandomState.randomSeed = randomSeed;
+        NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingRandomState);
+    }
 
-        SendingUserState.InputGiven = inputGiven;
-
-        SendingUserState.CannonRotation = cannonRotation;
-        
-//        Debug.Log("Broadcasting VR avatar update"+SendingUserState.InputStrength );
-        SendingUserState.HeadPosition      = VRHead.position;
-        SendingUserState.HeadRotation      = VRHead.rotation;
-     
-        SendingUserState.HandLeftPosition  = VRHandLeft.position;
-        SendingUserState.HandLeftRotation  = VRHandLeft.rotation;
-        SendingUserState.HandRightPosition = VRHandRight.position;
-        SendingUserState.HandRightRotation = VRHandRight.rotation;
-        */
-        SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
-        SendingUserState.responseGiven = responseGiven;
-        //SendingUserState.respondedTargetPresent = respondedTargetPresent;
-        SendingUserState.playerReady = playerReady;
-        NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
+    public void BroadCastResponseState(bool responseGiven, bool trialAnswer)
+    {
+        SendingResponseState.responseGiven = responseGiven;
+        SendingResponseState.trialAnswer = trialAnswer;
+        NetComp.BroadcastNetworkData(ENetChannel.Reliable, SendingResponseState);
     }
 
     // Start is called before the first frame update
@@ -131,16 +121,25 @@ public class NetworkManager : MonoBehaviour
     void OnNetworkDataReceived(object sender, ReceivedNetworkDataEventArgs e)
     {
         NetworkData data = e.Data;
-        if (e.Type == ENetDataType.ExperimentState)
+        switch (e.Type)
         {
-            ExperimentState state =(ExperimentState) data;
-            ExperimentManager.Instance().SetExperimentStatus(state.Status);
-            //Debug.LogFormat("Received experiment status update: {0}", state.Status);
-        }
-        else if (e.Type == ENetDataType.UserState)
-        {
-            //Debug.Log("Received user data update");
-            ExperimentManager.Instance().ReceivedUserStateUpdate((UserState)data);
+            case ENetDataType.ExperimentState:
+            {
+                ExperimentState state =(ExperimentState) data;
+                ExperimentManager.Instance().SetExperimentStatus(state.Status);
+                break;
+            }
+            case ENetDataType.UserState:
+                ExperimentManager.Instance().ReceivedUserStateUpdate((UserState)data);
+                break;
+            case ENetDataType.RandomState:
+                ExperimentManager.Instance().ReceivedRandomStateUpdate((RandomState)data);
+                break;
+            case ENetDataType.ResponseState:
+                ExperimentManager.Instance().ReceivedResponseStateUpdate((ResponseState)data);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
     

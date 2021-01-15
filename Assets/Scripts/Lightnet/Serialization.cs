@@ -19,6 +19,11 @@ public static class SerializationHelper
     //     return Convert.ToBoolean(value);
     // }
 
+    public static void FromBytes(byte[] data, ref int offset, ref float floatValue)
+    {
+        floatValue = FromBytes(data, ref offset);
+    }
+
     public static void FromBytes(byte[] data, ref int offset, ref bool boolValue)
     {
         boolValue = Convert.ToBoolean(FromBytes(data, ref offset));
@@ -54,6 +59,13 @@ public static class SerializationHelper
         Array.Copy(buffer, 0, data, offset, buffer.Length);
         offset += buffer.Length;
     }
+    
+    public static void ToBytes(int value, byte[] data, ref int offset)
+    {
+        ToBytes((float)value, data, ref offset);
+    }
+    
+    
 
     public static void ToBytes(bool value, byte[] data, ref int offset)
     {
@@ -83,7 +95,9 @@ public static class SerializationHelper
 public enum ENetDataType : byte
 {
     UserState = 1,
-    ExperimentState = 2
+    ExperimentState = 2,
+    RandomState = 3 ,
+    ResponseState = 4
 }
 
 
@@ -128,22 +142,24 @@ public class ExperimentState : NetworkData
         Status = (EExperimentStatus) data[offset];
     }
 }
+
 public class UserState : NetworkData
 {
     const int SIZE =
         // NOTE: using e.g. sizeof(Vector3) is not allowed...
         // so we need to always use sizeof(float) instead
 
-        sizeof(byte) +         // header     (ENetDataType.UserState)
-        sizeof(float) * 3 +    // Vector3    GazeSpherePosition;
-        sizeof(float) * 2;     // to float converted booleans   responseGiven, respondedTargetPresent, playerReady
+        sizeof(byte) + // header     (ENetDataType.UserState)
+        sizeof(float) * 3 + // Vector3    GazeSpherePosition;
+        sizeof(float) * 1; // to float converted booleans   responseGiven, trialAnswer, playerReady
 
 
-    public Vector3      GazeSpherePosition;
-    public bool         responseGiven;
-    //public bool         respondedTargetPresent;
-    public bool         playerReady;
- 
+    public Vector3 GazeSpherePosition;
+
+    //public bool responseGiven;
+    //public bool trialAnswer;
+    public bool playerReady;
+
     byte[] Cache = new byte[SIZE];
 
 
@@ -151,26 +167,103 @@ public class UserState : NetworkData
     {
         int head = 0;
         Debug.Assert(data.Length >= SIZE);
-        Debug.Assert((ENetDataType)data[head] == ENetDataType.UserState);
+        Debug.Assert((ENetDataType) data[head] == ENetDataType.UserState);
         head += sizeof(byte);
 
         SerializationHelper.FromBytes(data, ref head, ref GazeSpherePosition);
-        SerializationHelper.FromBytes(data, ref head, ref responseGiven);
-        //SerializationHelper.FromBytes(data, ref head, ref respondedTargetPresent);
+        //SerializationHelper.FromBytes(data, ref head, ref responseGiven);
         SerializationHelper.FromBytes(data, ref head, ref playerReady);
+        //SerializationHelper.FromBytes(data, ref head, ref trialAnswer);
     }
 
     public byte[] Serialize()
     {
         int head = 0;
-        Cache[head] = (byte)ENetDataType.UserState; head += sizeof(byte);
+        Cache[head] = (byte) ENetDataType.UserState;
+        head += sizeof(byte);
 
         SerializationHelper.ToBytes(ref GazeSpherePosition, Cache, ref head);
-        SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
-        //SerializationHelper.ToBytes(Convert.ToSingle(respondedTargetPresent), Cache, ref head);
+        //SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
         SerializationHelper.ToBytes(Convert.ToSingle(playerReady), Cache, ref head);
-        
+        //SerializationHelper.ToBytes(Convert.ToSingle(trialAnswer), Cache, ref head);
+
 
         return Cache;
     }
+}
+
+public class RandomState : NetworkData
+    {
+        const int SIZE =
+            // NOTE: using e.g. sizeof(Vector3) is not allowed...
+            // so we need to always use sizeof(float) instead
+            
+            sizeof(byte) +     //header 
+            sizeof(float);     // random seed as float
+
+
+        public float randomSeed;
+ 
+        byte[] Cache = new byte[SIZE];
+        
+        public byte[] Serialize()
+        {
+            int head = 0;
+            Cache[head] = (byte)ENetDataType.RandomState; 
+            head += sizeof(byte);
+            
+            SerializationHelper.ToBytes(randomSeed, Cache, ref head);
+
+            return Cache;
+        }
+
+        public void Deserialize(byte[] data)
+        {
+            int head = 0;
+            Debug.Assert(data.Length >= SIZE);
+            Debug.Assert((ENetDataType)data[head] == ENetDataType.RandomState);
+            head += sizeof(byte);
+
+            SerializationHelper.FromBytes(data, ref head, ref randomSeed);
+        }
+    }
+
+public class ResponseState : NetworkData
+{
+    const int SIZE =
+        // NOTE: using e.g. sizeof(Vector3) is not allowed...
+        // so we need to always use sizeof(float) instead
+            
+        sizeof(byte) +     //header 
+        sizeof(float) * 2;     // trialAnswer, responseGiven
+
+
+    public bool responseGiven;
+    public bool trialAnswer;
+ 
+    byte[] Cache = new byte[SIZE];
+        
+    public byte[] Serialize()
+    {
+        int head = 0;
+        Cache[head] = (byte)ENetDataType.ResponseState; 
+        head += sizeof(byte);
+        
+        SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
+        SerializationHelper.ToBytes(Convert.ToSingle(trialAnswer), Cache, ref head);
+
+        return Cache;
+    }
+
+    public void Deserialize(byte[] data)
+    {
+        int head = 0;
+        Debug.Assert(data.Length >= SIZE);
+        Debug.Assert((ENetDataType)data[head] == ENetDataType.ResponseState);
+        head += sizeof(byte);
+
+        SerializationHelper.FromBytes(data, ref head, ref responseGiven);
+        SerializationHelper.FromBytes(data, ref head, ref trialAnswer);
+    }
+    
 }

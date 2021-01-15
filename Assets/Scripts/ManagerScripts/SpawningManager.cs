@@ -25,14 +25,14 @@ public class SpawningManager : MonoBehaviour
     private bool _stimuliInScene = false;
     public bool targetPresent;
     public bool answeredPresent;
-
+    public bool trialAnswer;
+    
     public int[] stimuliSizes = {21, 35};
     private int _stimuliSize;
     private int _targetIndex;
 
     public int numberOfTrials = 5; // Originally 192
     public int currentTrial = 0;
-    public int randomSeed = 7;
 
     public float stimuliOnsetTime;
 
@@ -55,7 +55,7 @@ public class SpawningManager : MonoBehaviour
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
-        _rnd = new Random(randomSeed);
+        
 
         // Setting the feedback text to empty
         feedbackText.GetComponent<TextMesh>().text = ""; 
@@ -86,13 +86,15 @@ public class SpawningManager : MonoBehaviour
         if (CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
+            _experimentManager.LocalResponseGiven = false;
+            _experimentManager.RemoteResponseGiven = false;
         }
 
         if (overlayScript.hmdUsed)
         {
             if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
             {
-                _experimentManager.LocalResponseGiven = false;
+                //_experimentManager.LocalResponseGiven = false;
 
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
@@ -121,11 +123,16 @@ public class SpawningManager : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                _experimentManager.LocalResponseGiven = false;
+                // _experimentManager.LocalResponseGiven = false;
 
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
         }
+    }
+
+    public void SetRandomObject(float randomSeed)
+    {
+        _rnd = new Random((int) randomSeed);
     }
 
     private bool CheckAlreadyAnswered()
@@ -138,22 +145,15 @@ public class SpawningManager : MonoBehaviour
         lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
+        trialAnswer = answer;
+        _experimentManager.NetMan.BroadCastResponseState(_experimentManager.LocalResponseGiven, trialAnswer);	
 
-        // Text Feedback
-        if (overlayScript.hmdUsed)
-        {
-            feedbackText.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
-        }
-        else
-        {
-            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == answeredPresent ? "Correct!" : "Incorrect!";
-        }
+        
 
         // TODO: CHANGE / REMOVE THIS
-        Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
+        //Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
         Debug.Log("RT was " + lastReactionTime + " seconds");
 
-        //GiveTargetFeedback();
     }
 
     private void SpawnStimuli()
@@ -173,9 +173,11 @@ public class SpawningManager : MonoBehaviour
                 Destroy(stimulus);
             }
         }
-
+        
+        // Target-Present or Target-Absent Trial
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
+        // Stimuli-Size
         _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
         _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
 
@@ -203,6 +205,7 @@ public class SpawningManager : MonoBehaviour
         }
         else
         {
+            // only spawn distractor objects
             foreach (var spawnPoint in _chosenSpawnPoints)
             {
                 var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
@@ -214,6 +217,8 @@ public class SpawningManager : MonoBehaviour
         // Save GOs in list for later deletion.
         _stimuliGOs = GameObject.FindGameObjectsWithTag("stimulus");
         _stimuliInScene = true;
+        
+        // Set stimuli onset time
         stimuliOnsetTime = Time.time;
     }
 
@@ -230,15 +235,23 @@ public class SpawningManager : MonoBehaviour
 
     private void GiveTargetFeedback()
     {
-
-        // TODO: Extend Feedback
+        // Text Feedback
+        if (overlayScript.hmdUsed)
+        {
+            feedbackText.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        else
+        {
+            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        
+        //Debug.Log(targetPresent == trialAnswer ? "Correct!" : "Incorrect!");
+        
+        // Highlight Target Object if Present
         if (targetPresent)
         {
             targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
-
-
-
-
     }
+
 }
