@@ -15,7 +15,6 @@ public class SpawningManager : MonoBehaviour
     public GameObject feedbackText;
     public GameObject feedbackTextFallback;
     public float stimulusPresenceRate = 0.5f;
-    public GameObject leftController;
 
     private ExperimentManager _experimentManager;
 
@@ -55,7 +54,6 @@ public class SpawningManager : MonoBehaviour
     
     private void Start()
     {
-        leftController.GetComponentInChildren<SteamVR_RenderModel>().gameObject.SetActive(true);
         _experimentManager = GetComponentInParent<ExperimentManager>();
         _rnd = new Random(randomSeed);
 
