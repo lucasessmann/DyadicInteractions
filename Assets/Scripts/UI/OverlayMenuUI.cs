@@ -69,12 +69,11 @@ public class OverlayMenuUI : MonoBehaviour
     private Color lessSatButtonColor = new Color (0.03137255f, 0.5803922f, 0.9686275f, 0.3f);
     private Color ogTextColor = new Color (1f,1f,1f,1f);
     private Color lessSatTextColor = new Color (1f,1f,1f,0.3f);
-    
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
+        SteamVR_Utils.Event.Send("hide_render_models", false);
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
         subjectCanvasHmd.SetActive(false);
