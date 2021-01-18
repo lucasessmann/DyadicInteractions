@@ -14,6 +14,8 @@ public class SpawningManager : MonoBehaviour
     public GameObject targetGO;
     public GameObject feedbackText;
     public GameObject feedbackTextFallback;
+    public GameObject controllerTestRight;
+    public GameObject controllerTestLeft;
     public float stimulusPresenceRate = 0.5f;
 
     private ExperimentManager _experimentManager;
@@ -53,7 +55,8 @@ public class SpawningManager : MonoBehaviour
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
         
-
+        controllerTestRight.SetActive(false);
+        controllerTestLeft.SetActive(false);
         // Setting the feedback text to empty
         feedbackText.GetComponent<TextMesh>().text = ""; 
 
@@ -86,22 +89,45 @@ public class SpawningManager : MonoBehaviour
             _experimentManager.LocalResponseGiven = false;
             _experimentManager.RemoteResponseGiven = false;
         }
+        
 
         if (overlayScript.hmdUsed)
         {
+            if (inExperimentRoom)
+            {
+                    controllerTestLeft.SetActive(false);
+                    controllerTestRight.SetActive(false);
+            }
             if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any) & inExperimentRoom	)
             {
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
 
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any) & !inExperimentRoom)
+            {
+                controllerTestLeft.SetActive(false);
+                controllerTestRight.SetActive(false);
+            }
+            
             if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
             {
-                HandleResponse(true);
+                HandleResponse(false);
+            }
+            if (grabPinch.GetStateDown(leftInput) & !inExperimentRoom)
+            {
+                controllerTestRight.SetActive(false);
+                controllerTestLeft.SetActive(true);
             }
 
             if (grabPinch.GetStateDown(rightInput))
             {
-                HandleResponse(false);
+                HandleResponse(true);
+            }
+            
+            if (grabPinch.GetStateDown(rightInput) & !inExperimentRoom)
+            {
+                controllerTestLeft.SetActive(false);
+                controllerTestRight.SetActive(true);
             }
         }
         else
@@ -219,11 +245,11 @@ public class SpawningManager : MonoBehaviour
     private void GiveTargetFeedback()
     {
         // Text Feedback
-        if (overlayScript.hmdUsed)
+        if (overlayScript.hmdUsed & inExperimentRoom)
         {
             feedbackText.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
         }
-        else
+        else if (!overlayScript.hmdUsed & inExperimentRoom)
         {
             feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
         }
