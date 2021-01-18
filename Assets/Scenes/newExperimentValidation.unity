@@ -438,6 +438,7 @@ GameObject:
   - component: {fileID: 69397192}
   - component: {fileID: 69397191}
   - component: {fileID: 69397190}
+  - component: {fileID: 69397189}
   m_Layer: 0
   m_Name: GazeSphereLocal
   m_TagString: Untagged
@@ -445,6 +446,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &69397189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69397188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab3fe4d197a1da47be6364c86e1b216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLocations: {fileID: 700659166}
+  distance: 0
 --- !u!23 &69397190
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -452,7 +467,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69397188}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11623,6 +11638,7 @@ GameObject:
   - component: {fileID: 1967471895}
   - component: {fileID: 1967471894}
   - component: {fileID: 1967471893}
+  - component: {fileID: 1967471896}
   m_Layer: 0
   m_Name: GazeSphereRemote
   m_TagString: Untagged
@@ -11691,6 +11707,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1967471896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967471892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab3fe4d197a1da47be6364c86e1b216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerLocations: {fileID: 700659166}
+  distance: 0
 --- !u!1 &1980525395
 GameObject:
   m_ObjectHideFlags: 0
@@ -12301,12 +12331,12 @@ MonoBehaviour:
   targetPresent: 0
   answeredPresent: 0
   trialAnswer: 0
+  inExperimentRoom: 0
   stimuliSizes: 1500000023000000
   numberOfTrials: 5
   currentTrial: 0
   stimuliOnsetTime: 0
   lastReactionTime: 0
-  feedback: 
   overlayScript: {fileID: 842397237716256114}
   grabPinch:
     actionPath: /actions/default/in/GrabPinch
