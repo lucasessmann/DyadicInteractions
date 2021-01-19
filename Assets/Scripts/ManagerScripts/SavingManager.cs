@@ -25,6 +25,7 @@ public class SavingManager : MonoBehaviour
 	private ExperimentManager experimentManager;
 	private SpawningManager spawningManager;
 	private EyeTrackingManager eyeTrackingManager;
+	private OverlayMenuUI overlayMenuUI;
 	
 	
 	
@@ -36,14 +37,7 @@ public class SavingManager : MonoBehaviour
 		experimentManager = this.transform.parent.GetComponent<ExperimentManager>();
 		spawningManager = this.transform.parent.Find("SpawningManager").GetComponent<SpawningManager>();
 		eyeTrackingManager = this.transform.parent.Find("EyeTrackingManager").GetComponent<EyeTrackingManager>();
-		
-		// create a new saving folder for a new session
-		saveDir = Path.Combine(Application.persistentDataPath, "session_" + System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss"));
-		if(!Directory.Exists(saveDir))
-		{
-			//if folder doesn't exist, create it
-			Directory.CreateDirectory(saveDir);	
-		}
+		overlayMenuUI = this.transform.parent.Find("UIManager").GetComponent<OverlayMenuUI>();
 		
 		// set the current trial to the spawning manager's
 		currentTrial = spawningManager.currentTrial;
@@ -71,6 +65,15 @@ public class SavingManager : MonoBehaviour
 		
 	private IEnumerator loggingRoutine() {
 		
+		// create a new saving folder for a new session
+		// Since sub ID can be changed during experiment, this needs to be done here
+		saveDir = Path.Combine(Application.persistentDataPath, "subj_" + subID);
+		if(!Directory.Exists(saveDir))
+		{
+			//if folder doesn't exist, create it
+			Directory.CreateDirectory(saveDir);	
+		}
+		
 		// create a new empty log for the next trial
 		dataLog = new DataLog();
 		
@@ -81,6 +84,17 @@ public class SavingManager : MonoBehaviour
 		dataLog.targetPresent = spawningManager.targetPresent;
 		if (dataLog.targetPresent) {
 			dataLog.targetObjectPos = spawningManager.targetGO.transform.position;
+		}
+		if (overlayMenuUI.condition1PPressed) {
+			dataLog.condition = "1P";
+		} else if (overlayMenuUI.conditionSVPressed) {
+			dataLog.condition = "SV";
+		} else if (overlayMenuUI.conditionSGVPressed) {
+			dataLog.condition = "SGV";
+		} else if (overlayMenuUI.conditionSGPressed) {
+			dataLog.condition = "SG";
+		} else if (overlayMenuUI.conditionNCPressed) {
+			dataLog.condition = "NC";
 		}
 		
 		logIndex = 0;
@@ -116,12 +130,14 @@ public class DataLog
 	
 	// variables we save once
 	public string subID;
+	public string condition;
 	public int currentTrial;
 	public bool targetPresent;
 	public int[] stimuliSizes;
 	public Vector3 targetObjectPos;
 	public bool answerPresent;
 	public float lastReactionTime;
+
 	
 	// variables we log continuously
     public List<int> index = new List<int>();

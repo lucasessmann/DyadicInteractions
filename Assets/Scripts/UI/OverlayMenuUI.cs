@@ -60,11 +60,11 @@ public class OverlayMenuUI : MonoBehaviour
     private bool endPressed = false;
     private bool settingPressed = false;
     private bool subjectsettingPressed = false;
-    private bool condition1PPressed = false;
-    private bool conditionSVPressed = false;
-    private bool conditionSGVPressed = false;
-    private bool conditionSGPressed = false;
-    private bool conditionNCPressed = false;
+    public bool condition1PPressed = false;
+    public bool conditionSVPressed = false;
+    public bool conditionSGVPressed = false;
+    public bool conditionSGPressed = false;
+    public bool conditionNCPressed = false;
     private bool calPressed = false;
     private bool valPressed = false;
     private bool makeInteractable = true;
