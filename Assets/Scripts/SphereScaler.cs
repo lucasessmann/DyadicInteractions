@@ -7,7 +7,7 @@ public class SphereScaler : MonoBehaviour
     
     public Transform playerLocations;
     private int scaleFactor = 20;
-    public float distance;
+    private float distance;
     // Start is called before the first frame update
     void Start()
     {

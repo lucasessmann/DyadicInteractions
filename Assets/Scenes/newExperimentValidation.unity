@@ -459,7 +459,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerLocations: {fileID: 700659166}
-  distance: 0
 --- !u!23 &69397190
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -467,7 +466,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69397188}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -11908,7 +11907,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerLocations: {fileID: 700659166}
-  distance: 0
 --- !u!1 &1980525395
 GameObject:
   m_ObjectHideFlags: 0
@@ -13103,3 +13101,8 @@ MonoBehaviour:
   captureData: 0
   paused: 0
   readyBool: 0
+  condition1PPressed: 0
+  conditionSVPressed: 0
+  conditionSGVPressed: 0
+  conditionSGPressed: 0
+  conditionNCPressed: 0
