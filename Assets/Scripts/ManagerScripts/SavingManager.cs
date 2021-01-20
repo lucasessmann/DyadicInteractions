@@ -80,7 +80,7 @@ public class SavingManager : MonoBehaviour
 		// add stimulus variables at the beginning of the trial
 		dataLog.subID = subID;
 		dataLog.currentTrial = spawningManager.currentTrial;
-		dataLog.stimuliSizes = spawningManager.stimuliSizes;
+		dataLog.stimuliSize = spawningManager.stimuliSize;
 		dataLog.targetPresent = spawningManager.targetPresent;
 		if (dataLog.targetPresent) {
 			dataLog.targetObjectPos = spawningManager.targetGO.transform.position;
@@ -100,9 +100,9 @@ public class SavingManager : MonoBehaviour
 		logIndex = 0;
 		// probably we should stop recording only when both responses are given
 		// !(experimentManager.LocalResponseGiven && experimentManager.RemoteResponseGiven)
-		while(!experimentManager.LocalResponseGiven) {
-		
-		// add all variables that we want to log
+		while(!(experimentManager.LocalResponseGiven || experimentManager.RemoteResponseGiven)) {
+
+			// add all variables that we want to log
 		dataLog.index.Add(logIndex);
 		dataLog.sysTime.Add(System.DateTime.Now.ToString("yyyy-MM-dd_hh-mm-ss-ff"));
 		dataLog.runTime.Add(Time.time);
@@ -114,7 +114,7 @@ public class SavingManager : MonoBehaviour
 		}
 		
 		// add response variables at the end of trial
-		dataLog.answerPresent = spawningManager.answeredPresent;
+		dataLog.trialAnswer = spawningManager.trialAnswer;
 		dataLog.lastReactionTime = spawningManager.lastReactionTime;
 
 		// save the current data log
@@ -133,9 +133,9 @@ public class DataLog
 	public string condition;
 	public int currentTrial;
 	public bool targetPresent;
-	public int[] stimuliSizes;
+	public int stimuliSize;
 	public Vector3 targetObjectPos;
-	public bool answerPresent;
+	public bool trialAnswer;
 	public float lastReactionTime;
 
 	
