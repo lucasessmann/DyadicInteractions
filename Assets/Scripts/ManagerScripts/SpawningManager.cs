@@ -75,7 +75,7 @@ public class SpawningManager : MonoBehaviour
     public void Update()
     {
         if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
-            currentTrial <= numberOfTrials)
+            currentTrial < numberOfTrials)
         {
             //Resetting some measurement variables
             _experimentManager.LocalResponseGiven = false;
@@ -176,9 +176,12 @@ public class SpawningManager : MonoBehaviour
 
     private void SpawnStimuli()
     {
-        // Increment current Trial
-        currentTrial++;
-
+        // Increment current Trial if below max trials
+        if (currentTrial < numberOfTrials)
+        {
+            currentTrial++;
+        }
+        
         // Reset Answers
         _experimentManager.LocalPlayerReady = false;
 
