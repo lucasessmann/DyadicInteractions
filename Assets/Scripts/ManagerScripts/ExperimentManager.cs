@@ -160,30 +160,7 @@ public class ExperimentManager : MonoBehaviour
         Debug.Log("Experiment aborted!");
     }
 
-    public void StartExperiment()
-    {
-        if (!NetMan.IsServer())
-        {
-            Debug.LogWarning("Experiment initialization is only possible as server!");
-            return;
-        }
-
-        if (Status != EExperimentStatus.Waiting)
-        {
-            Debug.LogWarning("Cannot start Experiment, already in progress!");
-            return;
-        }
-
-        int numParticipants = NetMan.GetNumConnections() + 1;
-        if (numParticipants != 2)
-        {
-            Debug.LogWarningFormat("Experiment can only be started with exactly two participants! Currently: {0}", numParticipants);
-            return;
-        }
-
-        SetExperimentStatus(EExperimentStatus.WarmUp);
-    }
-
+  
     private void Awake()
     {
         _Instance = this;

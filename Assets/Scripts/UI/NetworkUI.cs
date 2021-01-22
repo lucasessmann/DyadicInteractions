@@ -34,14 +34,14 @@ public class NetworkUI : MonoBehaviour
         Debug.Assert(BtnStartClient != null);
         Debug.Assert(BtnAbortClose != null);
         Debug.Assert(ClientList != null);
-        Debug.Assert(BtnStartExp != null);
-        Debug.Assert(BtnAbortExp != null);
+        // Debug.Assert(BtnStartExp != null);
+        // Debug.Assert(BtnAbortExp != null);
 
         BtnStartServer.onClick.AddListener(BtnStartServerClicked);
         BtnStartClient.onClick.AddListener(BtnStartClientClicked);
-        BtnAbortClose.onClick.AddListener(BtnAbortCloseClicked);
-        BtnStartExp.onClick.AddListener(BtnStartExperiment);
-        BtnAbortExp.onClick.AddListener(BtnAbortExperiment);
+        // BtnAbortClose.onClick.AddListener(BtnAbortCloseClicked);
+        // BtnStartExp.onClick.AddListener(BtnStartExperiment);
+        // BtnAbortExp.onClick.AddListener(BtnAbortExperiment);
 
         NetMan.NetComp.OnClientConnected += (object sender, ConnectionEventArgs e) => 
         {
@@ -67,61 +67,61 @@ public class NetworkUI : MonoBehaviour
     {
         ENetworkState netState = NetMan.GetState();
         Debug.Assert(netState == ENetworkState.Closed);
-
+    
         PreviousNetState = netState;
         string address = AddressField.text;
         address = address.Length == 0 ? "127.0.0.1" : address;
         NetMan.StartClient(address);
     }
 
-    void BtnAbortCloseClicked()
-    {
-        ENetworkState netState = NetMan.GetState();
-        Debug.Assert(netState == ENetworkState.Running || netState == ENetworkState.Startup);
-        PreviousNetState = NetMan.GetState();
+    // void BtnAbortCloseClicked()
+    // {
+    //     ENetworkState netState = NetMan.GetState();
+    //     Debug.Assert(netState == ENetworkState.Running || netState == ENetworkState.Startup);
+    //     PreviousNetState = NetMan.GetState();
+    //
+    //     if (NetMan.IsServer())
+    //     {
+    //         Exp.AbortExperiment();
+    //     }
+    //
+    //     NetMan.Close();
+    // }
 
-        if (NetMan.IsServer())
-        {
-            Exp.AbortExperiment();
-        }
+    // void BtnStartExperiment()
+    // {
+    //     EExperimentStatus expStatus = Exp.GetExperimentStatus();
+    //     Debug.Assert(expStatus == EExperimentStatus.Waiting);
+    //     // Exp.StartExperiment();
+    // }
 
-        NetMan.Close();
-    }
-
-    void BtnStartExperiment()
-    {
-        EExperimentStatus expStatus = Exp.GetExperimentStatus();
-        Debug.Assert(expStatus == EExperimentStatus.Waiting);
-        Exp.StartExperiment();
-    }
-
-    void BtnAbortExperiment()
-    {
-        EExperimentStatus expStatus = Exp.GetExperimentStatus();
-        Debug.Assert(expStatus != EExperimentStatus.Waiting);
-        Exp.AbortExperiment();
-    }
+    // void BtnAbortExperiment()
+    // {
+    //     EExperimentStatus expStatus = Exp.GetExperimentStatus();
+    //     Debug.Assert(expStatus != EExperimentStatus.Waiting);
+    //     Exp.AbortExperiment();
+    // }
 
     void RefreshUI()
     {
         ENetworkState netState = NetMan.GetState();
         EExperimentStatus expStatus = Exp.GetExperimentStatus();
 
-        BtnStartServer.gameObject.SetActive(netState == ENetworkState.Closed);
-        BtnStartClient.gameObject.SetActive(netState == ENetworkState.Closed);
-        BtnAbortClose.gameObject.SetActive(netState == ENetworkState.Running || netState == ENetworkState.Startup);
+        // BtnStartServer.gameObject.SetActive(netState == ENetworkState.Closed);
+        // BtnStartClient.gameObject.SetActive(netState == ENetworkState.Closed);
+        // BtnAbortClose.gameObject.SetActive(netState == ENetworkState.Running || netState == ENetworkState.Startup);
         PreviousNetState = netState;
 
-        if (NetMan.IsServer())
-        {
-            BtnStartExp.gameObject.SetActive(expStatus == EExperimentStatus.Waiting && NetMan.GetNumConnections() == 1);
-            BtnAbortExp.gameObject.SetActive(expStatus != EExperimentStatus.Waiting);
-        }
-        else
-        {
-            BtnStartExp.gameObject.SetActive(false);
-            BtnAbortExp.gameObject.SetActive(false);
-        }
+        // if (NetMan.IsServer())
+        // {
+        //     BtnStartExp.gameObject.SetActive(expStatus == EExperimentStatus.Waiting && NetMan.GetNumConnections() == 1);
+        //     BtnAbortExp.gameObject.SetActive(expStatus != EExperimentStatus.Waiting);
+        // }
+        // else
+        // {
+        //     // BtnStartExp.gameObject.SetActive(false);
+        //     // BtnAbortExp.gameObject.SetActive(false);
+        // }
         PreviousExpStatus = expStatus;
         bPreviousServerState = NetMan.IsServer();
 

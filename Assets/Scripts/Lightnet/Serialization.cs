@@ -156,8 +156,7 @@ public class UserState : NetworkData
 
     public Vector3 GazeSpherePosition;
 
-    //public bool responseGiven;
-    //public bool trialAnswer;
+
     public bool playerReady;
     public bool startExperiment;
 
@@ -172,9 +171,7 @@ public class UserState : NetworkData
         head += sizeof(byte);
 
         SerializationHelper.FromBytes(data, ref head, ref GazeSpherePosition);
-        //SerializationHelper.FromBytes(data, ref head, ref responseGiven);
         SerializationHelper.FromBytes(data, ref head, ref playerReady);
-        //SerializationHelper.FromBytes(data, ref head, ref trialAnswer);
         SerializationHelper.FromBytes(data, ref head, ref startExperiment);
     }
 
@@ -185,9 +182,7 @@ public class UserState : NetworkData
         head += sizeof(byte);
 
         SerializationHelper.ToBytes(ref GazeSpherePosition, Cache, ref head);
-        //SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
         SerializationHelper.ToBytes(Convert.ToSingle(playerReady), Cache, ref head);
-        //SerializationHelper.ToBytes(Convert.ToSingle(trialAnswer), Cache, ref head);
         SerializationHelper.ToBytes(Convert.ToSingle(startExperiment), Cache, ref head);
 
 
