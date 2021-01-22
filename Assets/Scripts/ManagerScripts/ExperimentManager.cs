@@ -17,6 +17,9 @@ public class ExperimentManager : MonoBehaviour
 
     public bool LocalPlayerReady;
     public bool RemotePlayerReady;
+
+    public bool localStartExperiment;
+    public bool remoteStartExperiment;
     
     public bool startExperimentPress= false;
     public bool useHDMI;
@@ -48,7 +51,10 @@ public class ExperimentManager : MonoBehaviour
     [Header("Required References")]
     public NetworkManager NetMan;
     
-    public TextMesh CountdownDiplay;
+    public TextMesh infoTextVR;
+
+    public TextMesh infoTextFallback;
+
     public GameObject playerSteam;
    
     
@@ -66,7 +72,8 @@ public class ExperimentManager : MonoBehaviour
         //RemoteResponseGiven = incomingState.responseGiven;
         //_spawnManager.trialAnswer = incomingState.trialAnswer;
         RemotePlayerReady = incomingState.playerReady;
-        
+        remoteStartExperiment = incomingState.startExperiment;
+
     }
 
     public void ReceivedRandomStateUpdate(RandomState incomingState)
@@ -92,18 +99,18 @@ public class ExperimentManager : MonoBehaviour
 
         if (status == EExperimentStatus.Waiting)
         {
-            CountdownDiplay.text = "Waiting...";
-            CountdownDiplay.gameObject.SetActive(true);
+            // CountdownDisplay.text = "Waiting...";
+            // CountdownDisplay.gameObject.SetActive(true);
         }
         else if (status == EExperimentStatus.WarmUp)
         {
             WarmUpTimer = WarmUpTime;
-            CountdownDiplay.gameObject.SetActive(true);
+            // CountdownDisplay.gameObject.SetActive(true);
         }
         else // Running
         {
             
-            CountdownDiplay.gameObject.SetActive(false);
+            // CountdownDisplay.gameObject.SetActive(false);
             
         }
     }
@@ -189,25 +196,58 @@ public class ExperimentManager : MonoBehaviour
         Debug.Assert(RemoteGazeSphere != null, "Remote GazeSphere is not set");
         Debug.Assert(LocalGazeSphere != null, "Local GazeSphere is not set");
 
-        Debug.Assert(CountdownDiplay != null, "Countdown text mesh is not set!");
         
         Status = EExperimentStatus.Waiting;
 
         _spawnManager = GetComponentInChildren<SpawningManager>();
+        
+        localStartExperiment = false;
+        remoteStartExperiment = false;
     }
 
     private void Update()
     {
         if (startExperimentPress)
         {
+            localStartExperiment = true;
+            
+            startExperimentPress = false;
+        }
+
+        // if only local start experiment true
+        if (localStartExperiment & !remoteStartExperiment)
+        {
+            // activate both text meshs
+            infoTextVR.text = "waiting for partner";
+            infoTextVR.gameObject.SetActive(true);
+            infoTextFallback.text = "waiting for partner";
+            infoTextFallback.gameObject.SetActive(true);
+        }
+        
+        // if only remote start experiment true
+        if (!localStartExperiment & remoteStartExperiment)
+        {
+            // activate both text meshs
+            infoTextVR.text = "partner is ready";
+            infoTextVR.gameObject.SetActive(true);
+            infoTextFallback.text = "partner is ready";
+            infoTextFallback.gameObject.SetActive(true);
+        }
+
+        // if both participants have pressed start experiment
+        if (localStartExperiment & remoteStartExperiment)
+        {
+            // deactivate both info texts
+            infoTextVR.gameObject.SetActive(false);
+            infoTextFallback.gameObject.SetActive(false);
+
+            
+            // then teleport players
             playerPosition.position = startPositionExperiment.position;
             playerPosition.localEulerAngles = new Vector3(0, 0, 0);
             _spawnManager.inExperimentRoom = true;
-            // player is set to ready state
-            // startExperiment = false;
-            // LocalPlayerReady = true;
 
-            
+
             if (NetMan.IsServer() && !randomSeedSet)
             {
                 Random rnd = new Random();
@@ -218,12 +258,14 @@ public class ExperimentManager : MonoBehaviour
 
             }
 
-            startExperimentPress = false;
+            // localStartExperiment = false;
+            // remoteStartExperiment = false; // should be set by network, but to make sure
+
         }
         
         if (NetMan.GetState() == ENetworkState.Running)
         {
-            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalPlayerReady);
+            NetMan.BroadcastExperimentState(LocalGazeSphere, LocalPlayerReady, localStartExperiment);
         }
 
         if (Status == EExperimentStatus.WarmUp)
@@ -237,7 +279,7 @@ public class ExperimentManager : MonoBehaviour
                     SetExperimentStatus(EExperimentStatus.Running);
                 }
             }
-            //CountdownDiplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();
+            //CountdownDisplay.text = "Get Ready\n" + Mathf.Ceil(WarmUpTimer).ToString();
         }
     }
 }

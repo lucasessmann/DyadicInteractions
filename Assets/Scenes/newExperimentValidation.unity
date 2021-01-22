@@ -1262,6 +1262,8 @@ MonoBehaviour:
   RemoteResponseGiven: 0
   LocalPlayerReady: 0
   RemotePlayerReady: 0
+  localStartExperiment: 0
+  remoteStartExperiment: 0
   startExperimentPress: 0
   useHDMI: 0
   withEyeTracking: 0
@@ -1270,7 +1272,8 @@ MonoBehaviour:
   WarmUpTime: 3
   InterpolationFactor: 5
   NetMan: {fileID: 309331644}
-  CountdownDiplay: {fileID: 606169744}
+  infoTextVR: {fileID: 606169744}
+  infoTextFallback: {fileID: 1444451854}
   playerSteam: {fileID: 700659165}
 --- !u!1 &199658564
 GameObject:
@@ -6744,11 +6747,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You will work together with a partner.
 
-    You cannot talk to each other,
-    but you will see where your partner is looking during the task. The
-
-    gaze
-    location of your partner will be marked by a moving blue sphere.'
+    You can talk to each other
+    during the task.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7758,9 +7758,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Welcome to the Quest Academy.\r\nThere have been reports of broken trophies
-    at the wall of fame. \r\nYour task is it to investigate whether a broken Q trophy
-    is among the other Qs. We expect the broken trophy to look like an O"
+  m_text: 'Welcome to the Quest Academy.
+
+    There have been reports of broken
+    trophies at the wall of fame.
+
+    Your task will be to investigate whether
+    a broken Q trophy is among the other Qs. We expect the
+
+    broken trophy to
+    look like an O.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12141,8 +12148,11 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'You will work together with a partner.
 
-    You can talk to each other
-    during the task.'
+    You cannot talk to each other,
+    but you will see where your partner is looking during the task. The
+
+    gaze
+    location of your partner will be marked by a moving blue sphere.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -12521,6 +12531,7 @@ MonoBehaviour:
   trialAnswer: 0
   inExperimentRoom: 0
   stimuliSizes: 1500000023000000
+  stimuliSize: 0
   numberOfTrials: 5
   currentTrial: 0
   stimuliOnsetTime: 0

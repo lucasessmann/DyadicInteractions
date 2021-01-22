@@ -145,20 +145,21 @@ public class ExperimentState : NetworkData
 
 public class UserState : NetworkData
 {
-    const int SIZE =
+    private const int SIZE =
         // NOTE: using e.g. sizeof(Vector3) is not allowed...
         // so we need to always use sizeof(float) instead
 
         sizeof(byte) + // header     (ENetDataType.UserState)
         sizeof(float) * 3 + // Vector3    GazeSpherePosition;
-        sizeof(float) * 1; // to float converted booleans   responseGiven, trialAnswer, playerReady
-
+        sizeof(float) * 1 + // to float converted booleans   responseGiven, trialAnswer, playerReady
+        sizeof(float) * 1;  // bool        startExperiment         
 
     public Vector3 GazeSpherePosition;
 
     //public bool responseGiven;
     //public bool trialAnswer;
     public bool playerReady;
+    public bool startExperiment;
 
     byte[] Cache = new byte[SIZE];
 
@@ -174,6 +175,7 @@ public class UserState : NetworkData
         //SerializationHelper.FromBytes(data, ref head, ref responseGiven);
         SerializationHelper.FromBytes(data, ref head, ref playerReady);
         //SerializationHelper.FromBytes(data, ref head, ref trialAnswer);
+        SerializationHelper.FromBytes(data, ref head, ref startExperiment);
     }
 
     public byte[] Serialize()
@@ -186,6 +188,7 @@ public class UserState : NetworkData
         //SerializationHelper.ToBytes(Convert.ToSingle(responseGiven), Cache, ref head);
         SerializationHelper.ToBytes(Convert.ToSingle(playerReady), Cache, ref head);
         //SerializationHelper.ToBytes(Convert.ToSingle(trialAnswer), Cache, ref head);
+        SerializationHelper.ToBytes(Convert.ToSingle(startExperiment), Cache, ref head);
 
 
         return Cache;
