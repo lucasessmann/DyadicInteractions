@@ -34,7 +34,7 @@ public class SpawningManager : MonoBehaviour
     public int stimuliSize;
     private int _targetIndex;
 
-    public int numberOfTrials = 5; // Originally 192
+    public int numberOfTrials = 20; // Originally 192
     public int currentTrial;
 
     public float stimuliOnsetTime;
