@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -7760,14 +7760,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Welcome to the Quest Academy.
 
-    There have been reports of broken
-    trophies at the wall of fame.
+    There have been reports of broken trophies
+    at the wall of fame.
 
-    Your task will be to investigate whether
-    a broken Q trophy is among the other Qs. We expect the
+    Your task will be to investigate whether a broken Q
+    trophy is among the other Qs. We expect the
 
-    broken trophy to
-    look like an O.'
+    broken trophy to look like an
+    O.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -8989,7 +8989,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logData: 0
-  loggingInterval: 0.5
+  loggingInterval: 0.02
   subID: NOT_ASSIGNED
 --- !u!1 &1369261962
 GameObject:
