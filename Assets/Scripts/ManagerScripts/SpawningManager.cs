@@ -31,7 +31,7 @@ public class SpawningManager : MonoBehaviour
     public bool inExperimentRoom;
     
     public int[] stimuliSizes = {21, 35};
-    private int _stimuliSize;
+    public int stimuliSize;
     private int _targetIndex;
 
     public int numberOfTrials = 5; // Originally 192
@@ -77,17 +77,22 @@ public class SpawningManager : MonoBehaviour
         if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
             currentTrial <= numberOfTrials)
         {
-            SpawnStimuli();
+            //Resetting some measurement variables
+            _experimentManager.LocalResponseGiven = false;
+            _experimentManager.RemoteResponseGiven = false;
+            lastReactionTime = 0.0f;
             // Setting the feedback text to empty
             feedbackText.GetComponent<TextMesh>().text = ""; 
             feedbackTextFallback.GetComponent<TextMesh>().text = ""; 
+            
+            SpawnStimuli();
+            
+            
         }
 
         if (CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
-            _experimentManager.LocalResponseGiven = false;
-            _experimentManager.RemoteResponseGiven = false;
         }
         
 
@@ -190,8 +195,8 @@ public class SpawningManager : MonoBehaviour
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
         // Stimuli-Size
-        _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
-        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+        stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
+        _chosenSpawnPoints = stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
         
         if (targetPresent)
         {
