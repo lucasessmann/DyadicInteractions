@@ -39,7 +39,7 @@ public class NetworkUI : MonoBehaviour
 
         BtnStartServer.onClick.AddListener(BtnStartServerClicked);
         BtnStartClient.onClick.AddListener(BtnStartClientClicked);
-        // BtnAbortClose.onClick.AddListener(BtnAbortCloseClicked);
+        BtnAbortClose.onClick.AddListener(BtnAbortCloseClicked);
         // BtnStartExp.onClick.AddListener(BtnStartExperiment);
         // BtnAbortExp.onClick.AddListener(BtnAbortExperiment);
 
@@ -74,19 +74,19 @@ public class NetworkUI : MonoBehaviour
         NetMan.StartClient(address);
     }
 
-    // void BtnAbortCloseClicked()
-    // {
-    //     ENetworkState netState = NetMan.GetState();
-    //     Debug.Assert(netState == ENetworkState.Running || netState == ENetworkState.Startup);
-    //     PreviousNetState = NetMan.GetState();
-    //
-    //     if (NetMan.IsServer())
-    //     {
-    //         Exp.AbortExperiment();
-    //     }
-    //
-    //     NetMan.Close();
-    // }
+    void BtnAbortCloseClicked()
+    {
+        ENetworkState netState = NetMan.GetState();
+        Debug.Assert(netState == ENetworkState.Running || netState == ENetworkState.Startup);
+        PreviousNetState = NetMan.GetState();
+    
+        if (NetMan.IsServer())
+        {
+            Exp.AbortExperiment();
+        }
+    
+        NetMan.Close();
+    }
 
     // void BtnStartExperiment()
     // {
@@ -107,9 +107,9 @@ public class NetworkUI : MonoBehaviour
         ENetworkState netState = NetMan.GetState();
         EExperimentStatus expStatus = Exp.GetExperimentStatus();
 
-        // BtnStartServer.gameObject.SetActive(netState == ENetworkState.Closed);
-        // BtnStartClient.gameObject.SetActive(netState == ENetworkState.Closed);
-        // BtnAbortClose.gameObject.SetActive(netState == ENetworkState.Running || netState == ENetworkState.Startup);
+        BtnStartServer.gameObject.SetActive(netState == ENetworkState.Closed);
+        BtnStartClient.gameObject.SetActive(netState == ENetworkState.Closed);
+        BtnAbortClose.gameObject.SetActive(netState == ENetworkState.Running || netState == ENetworkState.Startup);
         PreviousNetState = netState;
 
         // if (NetMan.IsServer())
