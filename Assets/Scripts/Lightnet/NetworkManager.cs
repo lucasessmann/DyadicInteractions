@@ -58,13 +58,23 @@ public class NetworkManager : MonoBehaviour
     }
 
     //public void BroadcastExperimentState(Transform gazeSphereTransform, bool responseGiven, bool respondedTargetPresent, bool playerReady)
-    public void BroadcastExperimentState(Transform gazeSphereTransform,  bool playerReady) //, bool responseGiven,bool trialAnswer)
+    public void BroadcastExperimentState(Transform gazeSphereTransform,  bool playerReady, bool startExperiment) //, bool responseGiven,bool trialAnswer)
     {
         SendingUserState.GazeSpherePosition = gazeSphereTransform.position;
         //SendingUserState.responseGiven = responseGiven;
         SendingUserState.playerReady = playerReady;
         //SendingUserState.trialAnswer = trialAnswer;
-        NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
+        SendingUserState.startExperiment = startExperiment;
+
+        // if the experiment is started, use the reliable channel
+        if (startExperiment)
+        {
+            NetComp.BroadcastNetworkData(ENetChannel.Reliable, SendingUserState);
+        }
+        else
+        {
+            NetComp.BroadcastNetworkData(ENetChannel.Unreliable, SendingUserState);
+        }
     }
 
     public void BroadCastRandomState(float randomSeed)
