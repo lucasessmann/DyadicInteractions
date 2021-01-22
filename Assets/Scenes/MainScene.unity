@@ -12547,7 +12547,7 @@ MonoBehaviour:
   inExperimentRoom: 0
   stimuliSizes: 1500000023000000
   stimuliSize: 0
-  numberOfTrials: 5
+  numberOfTrials: 20
   currentTrial: 0
   stimuliOnsetTime: 0
   lastReactionTime: 0
