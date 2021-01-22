@@ -12,7 +12,7 @@ using Valve.VR.InteractionSystem;
 public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
-    // public GameObject playerSteam;
+    public GameObject remoteGazeSphere;
     public GameObject VRcamera;
     public GameObject EyeTrackingManager;
 
@@ -431,12 +431,15 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 condition1PPressed = false;
-                
+                // set instructions according to condition
                 textBackground.SetActive(false);
                 generalInfoText.SetActive(false);
                 fallbackText.SetActive(false);
                 vrText.SetActive(false);
                 text1P.SetActive(false);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -459,6 +462,7 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 condition1PPressed = true;
                 
+                // set instructions according to condition
                 textBackground.SetActive(true);
                 generalInfoText.SetActive(true);
                 if (hmdUsed)
@@ -470,6 +474,8 @@ public class OverlayMenuUI : MonoBehaviour
                     fallbackText.SetActive(true);
                 }
                 text1P.SetActive(true);
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
             }
             // Select condition
         }
@@ -496,11 +502,15 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSVPressed = false;
                 
+                // set instructions according to condition
                 textBackground.SetActive(false);
                 generalInfoText.SetActive(false);
                 fallbackText.SetActive(false);
                 vrText.SetActive(false);
                 textSv.SetActive(false);
+
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -523,6 +533,7 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSVPressed = true;
                 
+                // set instructions according to condition
                 textBackground.SetActive(true);
                 generalInfoText.SetActive(true);
                 if (hmdUsed)
@@ -534,6 +545,10 @@ public class OverlayMenuUI : MonoBehaviour
                     fallbackText.SetActive(true);
                 }
                 textSv.SetActive(true);
+                
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
+                
             }
             // Select condition
         }
@@ -560,11 +575,17 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSGVPressed = false;
                 
+                // set instructions according to condition
                 textBackground.SetActive(false);
                 generalInfoText.SetActive(false);
                 fallbackText.SetActive(false);
                 vrText.SetActive(false);
                 textSgv.SetActive(false);
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
+                
             }
             else
             {
@@ -587,6 +608,7 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSGVPressed = true;
                 
+                // set instructions according to condition
                 textBackground.SetActive(true);
                 generalInfoText.SetActive(true);
                 if (hmdUsed)
@@ -598,6 +620,9 @@ public class OverlayMenuUI : MonoBehaviour
                     fallbackText.SetActive(true);
                 }
                 textSgv.SetActive(true);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             // Select condition
         }
@@ -624,11 +649,16 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSGPressed = false;
                 
+                // set instructions according to condition
                 textBackground.SetActive(false);
                 generalInfoText.SetActive(false);
                 fallbackText.SetActive(false);
                 vrText.SetActive(false);
                 textSg.SetActive(false);
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
             }
             else
             {
@@ -651,6 +681,7 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionSGPressed = true;
                 
+                // set instructions according to condition
                 textBackground.SetActive(true);
                 generalInfoText.SetActive(true);
                 if (hmdUsed)
@@ -662,8 +693,11 @@ public class OverlayMenuUI : MonoBehaviour
                     fallbackText.SetActive(true);
                 }
                 textSg.SetActive(true);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
             }
-            // Select condition
         }
         public void ConditionNC()
         {
@@ -688,11 +722,16 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionNCPressed = false;
                 
+                // set instructions according to condition
                 textBackground.SetActive(false);
                 generalInfoText.SetActive(false);
                 fallbackText.SetActive(false);
                 vrText.SetActive(false);
                 textNc.SetActive(false);
+                
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -715,6 +754,7 @@ public class OverlayMenuUI : MonoBehaviour
                 
                 conditionNCPressed = true;
                 
+                // set instructions according to condition
                 textBackground.SetActive(true);
                 generalInfoText.SetActive(true);
                 if (hmdUsed)
@@ -726,6 +766,9 @@ public class OverlayMenuUI : MonoBehaviour
                     fallbackText.SetActive(true);
                 }
                 textNc.SetActive(true);
+                
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
             }
             // Select condition
         }

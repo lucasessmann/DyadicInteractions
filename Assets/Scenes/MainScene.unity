@@ -13086,6 +13086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4de14834a1eed45b9f53628b71954c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  remoteGazeSphere: {fileID: 1967471892}
   VRcamera: {fileID: 0}
   EyeTrackingManager: {fileID: 0}
   subjectCanvasHmd: {fileID: 481858823}
