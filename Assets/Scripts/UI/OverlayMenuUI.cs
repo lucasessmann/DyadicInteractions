@@ -319,14 +319,22 @@ public class OverlayMenuUI : MonoBehaviour
 		_savingManager.logData = false;
     }
 
+    // note the eye tracking settings should only be used if a VR headset is connected!
     public void EyeTrackingEnable()
     {
         enableEyeTracking = true;
+        // if eye tracking is set activate eye tracking manager component
         EyeTrackingManager.SetActive(true);
+        // deactivate the gaze sphere movement based on nose vector
+        VRcamera.GetComponent<VR_Camera_Tracking>().withEyeTracking = true;
     }
     public void EyeTrackingDisable()
     {
+        // if eye tracking is deactivated
         enableEyeTracking = false;
+        // deactivate the eye tracking component
+        EyeTrackingManager.SetActive(false);
+        // activate the gaze sphere movement based on nose vector
         VRcamera.GetComponent<VR_Camera_Tracking>().withEyeTracking = false;
     }
     
