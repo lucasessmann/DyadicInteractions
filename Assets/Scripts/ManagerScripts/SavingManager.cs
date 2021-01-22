@@ -54,7 +54,8 @@ public class SavingManager : MonoBehaviour
         }
 		
 		// start a new logging coroutine each trial
-		if (currentTrial != spawningManager.currentTrial) {
+		if (experimentManager.LocalPlayerReady && experimentManager.RemotePlayerReady &&
+            currentTrial != spawningManager.currentTrial) {
 
 			StartCoroutine("loggingRoutine");
 			currentTrial = spawningManager.currentTrial;
