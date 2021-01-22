@@ -2732,7 +2732,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "If you find the broken trophy press \u201Ey\u201C on the keyboard.\r\nIf 
+  m_text: "If you find the broken trophy press \u201Ey\u201C on the keyboard.\r\nIf
     all of the trophies are intact Qs press  \u201En\u201C on the keyboard.\r\nWhenever
     you are asked whether you are ready, press \u201Er\u201C on the keyboard.\r"
   m_isRightToLeft: 0
