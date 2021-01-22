@@ -8,7 +8,7 @@ public class VR_Camera_Tracking : MonoBehaviour
     
     public GameObject gazeSphere;
 
-    public bool withEyeTracking;
+    public bool withEyeTracking = false;
     
     // Start is called before the first frame update
     private void OnEnable()
@@ -18,8 +18,10 @@ public class VR_Camera_Tracking : MonoBehaviour
     }
     
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
+        // if EyeTracking is not activated, use the nose vector (or camera position)
+        // for the raycast to estimate and network the gaze sphere
         if (!withEyeTracking)
         {
             Vector3 direction = transform.TransformDirection(Vector3.forward);

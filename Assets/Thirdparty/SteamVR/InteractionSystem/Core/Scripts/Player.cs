@@ -42,7 +42,7 @@ namespace Valve.VR.InteractionSystem
 
 		public bool allowToggleTo2D = true;
 
-		// public bool useHMD;
+
 
 
 		//-------------------------------------------------
