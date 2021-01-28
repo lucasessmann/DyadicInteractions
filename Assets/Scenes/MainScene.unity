@@ -11284,7 +11284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00073b0114e15a84f82bca3d21baecd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gazeSphere: {fileID: 0}
+  gazeSphere: {fileID: 69397188}
   withEyeTracking: 0
 --- !u!20 &1795303405 stripped
 Camera:
