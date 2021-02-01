@@ -12,12 +12,14 @@ using Valve.VR.InteractionSystem;
 public class OverlayMenuUI : MonoBehaviour
 {
     #region Initialisation
-    // public GameObject playerSteam;
+    public GameObject remoteGazeSphere;
     public GameObject VRcamera;
     public GameObject EyeTrackingManager;
 
     private ExperimentManager _experimentManager;
 	private SavingManager _savingManager;
+    public GameObject subjectCanvasHmd;
+    public GameObject subjectCanvasFallback;
     public GameObject uiCanvas;
     public GameObject menuOverlay;
     public GameObject startButton;
@@ -37,6 +39,16 @@ public class OverlayMenuUI : MonoBehaviour
     public GameObject endExpButton;
     public GameObject exitTab;
     public GameObject readyButton;
+    public GameObject readyButtonFallback;
+    public GameObject textBackground;
+    public GameObject text1P;
+    public GameObject textSv;
+    public GameObject textSgv;
+    public GameObject textSg;
+    public GameObject textNc;
+    public GameObject generalInfoText;
+    public GameObject vrText;
+    public GameObject fallbackText;
     public TMP_InputField subIdText1;
     public string subId1;
     public bool subId1done = false;
@@ -48,11 +60,11 @@ public class OverlayMenuUI : MonoBehaviour
     private bool endPressed = false;
     private bool settingPressed = false;
     private bool subjectsettingPressed = false;
-    private bool condition1PPressed = false;
-    private bool conditionSVPressed = false;
-    private bool conditionSGVPressed = false;
-    private bool conditionSGPressed = false;
-    private bool conditionNCPressed = false;
+    public bool condition1PPressed = false;
+    public bool conditionSVPressed = false;
+    public bool conditionSGVPressed = false;
+    public bool conditionSGPressed = false;
+    public bool conditionNCPressed = false;
     private bool calPressed = false;
     private bool valPressed = false;
     private bool makeInteractable = true;
@@ -60,52 +72,44 @@ public class OverlayMenuUI : MonoBehaviour
     private Color lessSatButtonColor = new Color (0.03137255f, 0.5803922f, 0.9686275f, 0.3f);
     private Color ogTextColor = new Color (1f,1f,1f,1f);
     private Color lessSatTextColor = new Color (1f,1f,1f,0.3f);
-    
-    
-    
+
     // Start is called before the first frame update
     void Start()
     {
+        SteamVR_Utils.Event.Send("hide_render_models", false);
         uiCanvas.SetActive(true);
         menuOverlay.SetActive(false);
+        subjectCanvasHmd.SetActive(false);
+        textBackground.SetActive(false);
+        generalInfoText.SetActive(false);
+        fallbackText.SetActive(false);
+        vrText.SetActive(false);
+        text1P.SetActive(false);
+        textSv.SetActive(false);
+        textSgv.SetActive(false);
+        textSg.SetActive(false);
+        textNc.SetActive(false);
+        
         _experimentManager = GetComponentInParent<ExperimentManager>();
 		_savingManager = this.transform.parent.Find("SavingManager").GetComponent<SavingManager>();
         
         // playerSteam = GameObject.Find("PlayerSTEAM");
         VRcamera = GameObject.Find("VRCamera");
         EyeTrackingManager = GameObject.Find("EyeTrackingManager");
-
-
         
-        // Start Button deactivated
-        //startButton.GetComponent<LeanButton>().interactable = false;
-        //startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-        //startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
     }
 
     private void Update()
     {
-        if (_experimentManager.LocalPlayerReady)
+        if (hmdUsed)
         {
-            readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.green;
+            readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = _experimentManager.LocalPlayerReady ? Color.green : Color.white;
         }
         else
         {
-            readyButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = Color.white;
+            readyButtonFallback.transform.Find("Cap").Find("Text").GetComponent<Text>().color = _experimentManager.LocalPlayerReady ? Color.green : Color.white;
         }
-
-        /* if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady)
-        {
-            startButton.GetComponent<LeanButton>().interactable = true;
-            startButton.transform.Find("Cap").GetComponent<Image>().color = ogButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = ogTextColor;
-        }
-        else
-        {
-            startButton.GetComponent<LeanButton>().interactable = false;
-            startButton.transform.Find("Cap").GetComponent<Image>().color = lessSatButtonColor;
-            startButton.transform.Find("Cap").Find("Text").GetComponent<Text>().color = lessSatTextColor;
-        } */
+       
     }
 
     #endregion
@@ -291,12 +295,16 @@ public class OverlayMenuUI : MonoBehaviour
     public void HmdUseEnable()
     {
         hmdUsed = true;
+        subjectCanvasFallback.SetActive(false);
+        subjectCanvasHmd.SetActive(true);
         //playerSteam.SetActive(true);
         // playerSteam.GetComponent<Player>().useHMD = true;
     }
     public void HmdUseDisable()
     {
         hmdUsed = false;
+        subjectCanvasFallback.SetActive(true);
+        subjectCanvasHmd.SetActive(false);
         // layerSteam.SetActive(true);
         // playerSteam.GetComponent<Player>().useHMD = false;
     }
@@ -311,14 +319,22 @@ public class OverlayMenuUI : MonoBehaviour
 		_savingManager.logData = false;
     }
 
+    // note the eye tracking settings should only be used if a VR headset is connected!
     public void EyeTrackingEnable()
     {
         enableEyeTracking = true;
+        // if eye tracking is set activate eye tracking manager component
         EyeTrackingManager.SetActive(true);
+        // deactivate the gaze sphere movement based on nose vector
+        VRcamera.GetComponent<VR_Camera_Tracking>().withEyeTracking = true;
     }
     public void EyeTrackingDisable()
     {
+        // if eye tracking is deactivated
         enableEyeTracking = false;
+        // deactivate the eye tracking component
+        EyeTrackingManager.SetActive(false);
+        // activate the gaze sphere movement based on nose vector
         VRcamera.GetComponent<VR_Camera_Tracking>().withEyeTracking = false;
     }
     
@@ -423,6 +439,15 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 condition1PPressed = false;
+                // set instructions according to condition
+                textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
+                text1P.SetActive(false);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -444,6 +469,21 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 condition1PPressed = true;
+                
+                // set instructions according to condition
+                textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
+                text1P.SetActive(true);
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
             }
             // Select condition
         }
@@ -469,6 +509,16 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSVPressed = false;
+                
+                // set instructions according to condition
+                textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
+                textSv.SetActive(false);
+
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -490,6 +540,23 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSVPressed = true;
+                
+                // set instructions according to condition
+                textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
+                textSv.SetActive(true);
+                
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
+                
             }
             // Select condition
         }
@@ -515,6 +582,18 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGVPressed = false;
+                
+                // set instructions according to condition
+                textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
+                textSgv.SetActive(false);
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
+                
             }
             else
             {
@@ -536,6 +615,22 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGVPressed = true;
+                
+                // set instructions according to condition
+                textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
+                textSgv.SetActive(true);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             // Select condition
         }
@@ -561,6 +656,17 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGPressed = false;
+                
+                // set instructions according to condition
+                textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
+                textSg.SetActive(false);
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
             }
             else
             {
@@ -582,8 +688,24 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonNC.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionSGPressed = true;
+                
+                // set instructions according to condition
+                textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
+                textSg.SetActive(true);
+                
+                // make remote gaze sphere visible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
+                
             }
-            // Select condition
         }
         public void ConditionNC()
         {
@@ -607,6 +729,17 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonSG.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionNCPressed = false;
+                
+                // set instructions according to condition
+                textBackground.SetActive(false);
+                generalInfoText.SetActive(false);
+                fallbackText.SetActive(false);
+                vrText.SetActive(false);
+                textNc.SetActive(false);
+                
+                
+                // make remote gaze sphere visible (default)
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = true;
             }
             else
             {
@@ -628,6 +761,22 @@ public class OverlayMenuUI : MonoBehaviour
                 buttonSG.GetComponent<LeanButton>().interactable = makeInteractable;
                 
                 conditionNCPressed = true;
+                
+                // set instructions according to condition
+                textBackground.SetActive(true);
+                generalInfoText.SetActive(true);
+                if (hmdUsed)
+                {
+                    vrText.SetActive(true); 
+                }
+                else
+                {
+                    fallbackText.SetActive(true);
+                }
+                textNc.SetActive(true);
+                
+                // make remote gaze sphere invisible
+                remoteGazeSphere.GetComponent<MeshRenderer>().enabled = false;
             }
             // Select condition
         }

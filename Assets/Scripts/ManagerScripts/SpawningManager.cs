@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Valve.VR;
 using Random = System.Random;
 
@@ -11,6 +12,10 @@ public class SpawningManager : MonoBehaviour
     public GameObject distractorPrefab;
     public GameObject targetPrefab;
     public GameObject targetGO;
+    public GameObject feedbackText;
+    public GameObject feedbackTextFallback;
+    public GameObject controllerTestRight;
+    public GameObject controllerTestLeft;
     public float stimulusPresenceRate = 0.5f;
 
     private ExperimentManager _experimentManager;
@@ -19,25 +24,25 @@ public class SpawningManager : MonoBehaviour
     private List<Transform> _chosenSpawnPoints;
     private List<Quaternion> _distractorDirections = new List<Quaternion>();
 
-    private bool _stimuliInScene = false;
+    private bool _stimuliInScene;
     public bool targetPresent;
     public bool answeredPresent;
+    public bool trialAnswer;
+    public bool inExperimentRoom;
     
     public int[] stimuliSizes = {21, 35};
-    private int _stimuliSize;
+    public int stimuliSize;
     private int _targetIndex;
 
-    public int numberOfTrials = 5; // Originally 192
-    public int currentTrial = 0;
-    public int randomSeed = 7;
+    public int numberOfTrials = 20; // Originally 192
+    public int currentTrial;
 
     public float stimuliOnsetTime;
     public float lastReactionTime;
-    // TODO: SAVE ANSWER IN VARIABLE
-    
+
     private GameObject[] _stimuliGOs;
     private Random _rnd;
-    
+
 
     // Controllers
     public OverlayMenuUI overlayScript;
@@ -49,7 +54,11 @@ public class SpawningManager : MonoBehaviour
     private void Start()
     {
         _experimentManager = GetComponentInParent<ExperimentManager>();
-        _rnd = new Random(randomSeed);
+        
+        controllerTestRight.SetActive(false);
+        controllerTestLeft.SetActive(false);
+        // Setting the feedback text to empty
+        feedbackText.GetComponent<TextMesh>().text = ""; 
 
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 180));
         _distractorDirections.Add(Quaternion.Euler(-90, 0, 0));
@@ -66,33 +75,64 @@ public class SpawningManager : MonoBehaviour
     public void Update()
     {
         if (_experimentManager.LocalPlayerReady && _experimentManager.RemotePlayerReady &&
-            currentTrial <= numberOfTrials)
+            currentTrial < numberOfTrials)
         {
+            //Resetting some measurement variables
+            _experimentManager.LocalResponseGiven = false;
+            _experimentManager.RemoteResponseGiven = false;
+            lastReactionTime = 0.0f;
+            // Setting the feedback text to empty
+            feedbackText.GetComponent<TextMesh>().text = ""; 
+            feedbackTextFallback.GetComponent<TextMesh>().text = ""; 
+            
             SpawnStimuli();
+            
+            
         }
 
         if (CheckAlreadyAnswered())
         {
             GiveTargetFeedback();
         }
+        
 
         if (overlayScript.hmdUsed)
         {
-            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any))
+            if (inExperimentRoom)
             {
-                _experimentManager.LocalResponseGiven = false;
-
+                    controllerTestLeft.SetActive(false);
+                    controllerTestRight.SetActive(false);
+            }
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any) & inExperimentRoom	)
+            {
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
 
+            if (grabGrip.GetStateDown(SteamVR_Input_Sources.Any) & !inExperimentRoom)
+            {
+                controllerTestLeft.SetActive(false);
+                controllerTestRight.SetActive(false);
+            }
+            
             if (grabPinch.GetStateDown(leftInput) & !CheckAlreadyAnswered())
             {
-                HandleResponse(true);
+                HandleResponse(false);
+            }
+            if (grabPinch.GetStateDown(leftInput) & !inExperimentRoom)
+            {
+                controllerTestRight.SetActive(false);
+                controllerTestLeft.SetActive(true);
             }
 
             if (grabPinch.GetStateDown(rightInput))
             {
-                HandleResponse(false);
+                HandleResponse(true);
+            }
+            
+            if (grabPinch.GetStateDown(rightInput) & !inExperimentRoom)
+            {
+                controllerTestLeft.SetActive(false);
+                controllerTestRight.SetActive(true);
             }
         }
         else
@@ -107,13 +147,16 @@ public class SpawningManager : MonoBehaviour
                 HandleResponse(false);
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) & inExperimentRoom)
             {
-                _experimentManager.LocalResponseGiven = false;
-
                 _experimentManager.LocalPlayerReady = !_experimentManager.LocalPlayerReady;
             }
         }
+    }
+
+    public void SetRandomObject(float randomSeed)
+    {
+        _rnd = new Random((int) randomSeed);
     }
 
     private bool CheckAlreadyAnswered()
@@ -126,19 +169,18 @@ public class SpawningManager : MonoBehaviour
         lastReactionTime = Time.time - stimuliOnsetTime;
         _experimentManager.LocalResponseGiven = true;
         answeredPresent = answer;
-
-        // TODO: CHANGE / REMOVE THIS
-        Debug.Log(targetPresent == answeredPresent ? "Correct!" : "Incorrect!");
-        Debug.Log("RT was " + lastReactionTime + " seconds");
-
-        //GiveTargetFeedback();
+        trialAnswer = answer;
+        _experimentManager.NetMan.BroadCastResponseState(_experimentManager.LocalResponseGiven, trialAnswer);
+        //Debug.Log("RT was " + lastReactionTime + " seconds");
     }
 
     private void SpawnStimuli()
     {
-        
-        // Increment current Trial
-        currentTrial++;
+        // Increment current Trial if below max trials
+        if (currentTrial < numberOfTrials)
+        {
+            currentTrial++;
+        }
         
         // Reset Answers
         _experimentManager.LocalPlayerReady = false;
@@ -151,15 +193,14 @@ public class SpawningManager : MonoBehaviour
                 Destroy(stimulus);
             }
         }
-
+        
+        // Target-Present or Target-Absent Trial
         targetPresent = _rnd.NextDouble() < stimulusPresenceRate;
 
-        _stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
-        _chosenSpawnPoints = _stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21)  : _spawnPointsList;
-     
-
-
-
+        // Stimuli-Size
+        stimuliSize = stimuliSizes[_rnd.Next(stimuliSizes.Length)];
+        _chosenSpawnPoints = stimuliSize == 21 ? _spawnPointsList.GetRange(0, 21) : _spawnPointsList;
+        
         if (targetPresent)
         {
             // Randomly select the target position among the spawn points and 
@@ -181,6 +222,7 @@ public class SpawningManager : MonoBehaviour
         }
         else
         {
+            // only spawn distractor objects
             foreach (var spawnPoint in _chosenSpawnPoints)
             {
                 var distractorDirection = _distractorDirections[_rnd.Next(_distractorDirections.Count)];
@@ -192,6 +234,8 @@ public class SpawningManager : MonoBehaviour
         // Save GOs in list for later deletion.
         _stimuliGOs = GameObject.FindGameObjectsWithTag("stimulus");
         _stimuliInScene = true;
+        
+        // Set stimuli onset time
         stimuliOnsetTime = Time.time;
     }
 
@@ -208,15 +252,21 @@ public class SpawningManager : MonoBehaviour
 
     private void GiveTargetFeedback()
     {
-
-        // TODO: Extend Feedback
+        // Text Feedback
+        if (overlayScript.hmdUsed & inExperimentRoom)
+        {
+            feedbackText.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        else if (!overlayScript.hmdUsed & inExperimentRoom)
+        {
+            feedbackTextFallback.GetComponent<TextMesh>().text = targetPresent == trialAnswer ? "Correct!" : "Incorrect!";
+        }
+        
+        // Highlight Target Object if Present
         if (targetPresent)
         {
             targetGO.GetComponentInChildren<MeshRenderer>().material.color = Color.blue;
         }
-        
-        
-
-        
     }
+
 }

@@ -15,8 +15,9 @@ namespace Valve.VR.InteractionSystem
 	[RequireComponent( typeof( Camera ) )]
 	public class FallbackCameraController : MonoBehaviour
 	{
-		// added by Jasmin
-
+		
+		// script active if in 2D fallback mode
+		// gaze sphere is moved according to mouse cursor position
 		public Camera cam;
 		public GameObject gazeSphere;
 		
@@ -47,7 +48,7 @@ namespace Valve.VR.InteractionSystem
 		//-------------------------------------------------
 		void Update()
 		{
-			// Raycasting and moving gaze sphere
+			// Raycasting and moving gaze sphere according to mouse position on screen
 
 			Ray gazeRay = cam.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
@@ -56,58 +57,36 @@ namespace Valve.VR.InteractionSystem
 				gazeSphere.transform.position = hit.point;
 			}
 
-			// until here
+			// rotate player up down if arrows up down are pressed
 			float forward = 0.0f;
 			if ( Input.GetKey( KeyCode.W ) || Input.GetKey( KeyCode.UpArrow ) )
 			{
-				//forward += 1.0f;
+
 				transform.Rotate(-Vector3.right * RotateSpeed * Time.deltaTime);
 				
 			}
 			if ( Input.GetKey( KeyCode.S ) || Input.GetKey( KeyCode.DownArrow ) )
 			{
-				//forward -= 1.0f;
+
 				transform.Rotate(Vector3.right * RotateSpeed * Time.deltaTime);
 			}
 
-            /*float up = 0.0f;
-            if (Input.GetKey(KeyCode.E))
-            {
-                up += 1.0f;
-            }
-            if (Input.GetKey(KeyCode.Q))
-            {
-                up -= 1.0f;
-            }*/
-
-            // float right = 0.0f;
+			// rotate player according to input via arrows left right (original code of player)
 			if ( Input.GetKey( KeyCode.D ) || Input.GetKey( KeyCode.RightArrow ) )
 			{
-				//right += 1.0f;
 				transform.Rotate(Vector3.up * RotateSpeed * Time.deltaTime,Space.World);
 			}
 			if ( Input.GetKey( KeyCode.A ) || Input.GetKey( KeyCode.LeftArrow ) )
 			{
-				//right -= 1.0f;
 				transform.Rotate(-Vector3.up * RotateSpeed * Time.deltaTime,Space.World);
 			}
-
-			/*
-			float currentSpeed = speed;
-			if ( Input.GetKey( KeyCode.LeftShift ) || Input.GetKey( KeyCode.RightShift ) )
-			{
-				currentSpeed = shiftSpeed;
-			}
-			*/
+			
 
 			float realTimeNow = Time.realtimeSinceStartup;
 			float deltaRealTime = realTimeNow - realTime;
 			realTime = realTimeNow;
 
-			// Vector3 delta = new Vector3( right, up, forward ) * currentSpeed * deltaRealTime;
-			//
-			// transform.position += transform.TransformDirection( delta );
-
+			// do a fast rotation if right mouse button is pressed
 			Vector3 mousePosition = Input.mousePosition;
 
 			if ( Input.GetMouseButtonDown( 1 ) /* right mouse */)
@@ -121,17 +100,9 @@ namespace Valve.VR.InteractionSystem
 				Vector3 offset = mousePosition - startMousePosition;
 				transform.localEulerAngles = startEulerAngles + new Vector3( -offset.y * 360.0f / Screen.height, offset.x * 360.0f / Screen.width, 0.0f );
 			}
-			
 
 		}
 		
-
-		private void FixedUpdate()
-		{
-
-			
-
-		}
 
 
 		//-------------------------------------------------
